@@ -4,39 +4,70 @@
     <title>PoppyseedLA | Developer & Reseller</title>
     <style>
         body {
-            background-color: #f8fafc; /* Soft, clean off-white */
-            color: #1e293b; /* Deep professional slate */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: -apple-system, sans-serif;
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
             text-align: center;
         }
-        h1 { 
-            font-size: 3.5rem; 
-            margin-bottom: 0.5rem; 
-            letter-spacing: -1px;
-            color: #0f172a; 
+        h1 { font-size: 3rem; margin-top: 2rem; color: #0f172a; }
+        .grid {
+            display: flex;
+            gap: 20px;
+            max-width: 900px;
+            padding: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
-        p { 
-            font-size: 1.25rem; 
-            color: #64748b; 
-            max-width: 600px;
-            line-height: 1.6;
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s;
         }
-        .container {
-            padding: 20px;
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #3b82f6; /* A nice professional blue */
+        }
+        h2 { color: #0f172a; }
+        .btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #0f172a;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>PoppyseedLA</h1>
-        <p>Expert App Development & Curated Resale Gems.</p>
+    <h1>PoppyseedLA</h1>
+    <p>Building Apps & Sourcing Grails</p>
+
+    <div class="grid">
+        <div class="card">
+            <h2>The Dev Lab</h2>
+            <p>Software solutions built with React Native & Expo.</p>
+            <a href="#" class="btn">Explore Apps</a>
+        </div>
+
+        <div class="card">
+            <h2>The Vault</h2>
+            <p>Curated high-end sneakers and vintage headwear.</p>
+            <a href="#" class="btn">Shop Collection</a>
+        </div>
     </div>
 
 </body>
