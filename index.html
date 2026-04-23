@@ -51,6 +51,8 @@
         }
         h2 { color: #0f172a; margin-top: 0; margin-bottom: 15px; font-size: 2rem; }
         p { line-height: 1.6; color: #64748b; margin-bottom: 25px; }
+        
+        /* Button Styling */
         .btn {
             display: inline-block;
             margin-top: auto;
@@ -60,10 +62,16 @@
             text-decoration: none;
             border-radius: 12px;
             font-weight: bold;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
         .btn:hover {
-            background: #334155;
+            background: #3b82f6;
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background: #cbd5e1;
+            color: #475569;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -77,16 +85,20 @@
             <img src="PoppyseedLA24.png" alt="PoppyseedLA Dev Logo" class="brand-logo">
             <h2>The Dev Lab</h2>
             <p>Showcasing PiggyPal, Timeru, and premium mobile solutions built with React Native & Xcode.</p>
-            <a href="#" class="btn">Explore Apps</a>
+            <a href="#" class="btn btn-secondary">Apps Coming Soon</a>
         </div>
 
         <div class="card">
             <img src="vault-logo.jpeg" alt="PoppyseedLA Shop Logo" class="brand-logo">
             <h2>The Vault</h2>
             <p>Exclusive finds across all categories. From tech to collectibles, we source the best of everything.</p>
-            <a href="#" class="btn">Shop Collection</a>
+            <a href="https://www.ebay.com/str/poppyseedla" target="_blank" class="btn">Shop Collection</a>
         </div>
     </div>
+
+    <footer style="margin-top: 40px; color: #94a3b8; font-size: 0.9rem;">
+        &copy; 2026 PoppyseedLA. All rights reserved.
+    </footer>
 
 </body>
 </html>
