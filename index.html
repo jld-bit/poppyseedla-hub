@@ -15,10 +15,10 @@
             min-height: 100vh;
             text-align: center;
         }
-        h1 { font-size: 3rem; margin-top: 2rem; color: #0f172a; letter-spacing: -1px; }
+        h1 { font-size: 3.5rem; margin-top: 2rem; color: #0f172a; letter-spacing: -2px; }
         .grid {
             display: flex;
-            gap: 25px;
+            gap: 30px;
             max-width: 1000px;
             padding: 40px;
             flex-wrap: wrap;
@@ -26,44 +26,41 @@
         }
         .card {
             background: white;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             flex: 1;
-            min-width: 320px;
+            min-width: 340px;
             border: 1px solid #e2e8f0;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, border-color 0.3s;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             border-color: #3b82f6;
         }
-        /* Your Logo Styling */
+        /* Both logos are now the same size and shape */
         .brand-logo {
             width: 180px;
             height: 180px;
             border-radius: 50%;
-            margin-bottom: 20px;
-            object-fit: cover;
+            margin-bottom: 25px;
+            object-fit: contain; /* Logos look best when contained */
             border: 4px solid #f1f5f9;
+            padding: 10px; /* Gives the logos a little breathing room inside their circle */
         }
-        .vault-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-        }
-        h2 { color: #0f172a; margin-bottom: 15px; }
-        p { line-height: 1.6; color: #64748b; margin-bottom: 20px; }
+        h2 { color: #0f172a; margin-top: 0; margin-bottom: 15px; font-size: 2rem; }
+        p { line-height: 1.6; color: #64748b; margin-bottom: 25px; }
         .btn {
             display: inline-block;
             margin-top: auto;
-            padding: 12px 25px;
+            padding: 12px 28px;
             background: #0f172a;
             color: white;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: bold;
             transition: background 0.2s;
         }
@@ -75,20 +72,20 @@
 <body>
 
     <h1>PoppyseedLA</h1>
-    <p style="font-size: 1.2rem;">Building Apps & Sourcing Grails</p>
+    <p style="font-size: 1.25rem; color: #64748b; max-width: 600px;">Expert App Development & Sourcing Hard-to-Find Grails.</p>
 
     <div class="grid">
         <div class="card">
-            <img src="PoppyseedLA24.png" alt="PoppyseedLA Logo" class="brand-logo">
+            <img src="PoppyseedLA24.png" alt="PoppyseedLA Dev Logo" class="brand-logo">
             <h2>The Dev Lab</h2>
             <p>Showcasing PiggyPal, Timeru, and modern mobile solutions built with React Native & Expo.</p>
             <a href="#" class="btn">Explore Apps</a>
         </div>
 
         <div class="card">
-            <div class="vault-icon">👟</div>
+            <img src="vault-logo.png" alt="PoppyseedLA Shop Logo" class="brand-logo">
             <h2>The Vault</h2>
-            <p>Exclusive sneakers and vintage headwear. Sourcing the hard-to-find grails since 2024.</p>
+            <p>Exclusive sneakers and vintage headwear. A curated collection for the modern collector.</p>
             <a href="#" class="btn">Shop Collection</a>
         </div>
     </div>
