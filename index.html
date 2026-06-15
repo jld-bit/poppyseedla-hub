@@ -30,6 +30,8 @@
         <button onclick="renderProducts('Kids')">Kids</button>
         <button onclick="renderProducts('Home')">Home</button>
         <button onclick="renderProducts('Accessories')">Accessories</button>
+        <button onclick="renderProducts('Footwear')">Footwear</button>
+        <button onclick="renderProducts('Electronics')">Electronics</button>
     </nav>
     <div id="product-grid">Loading products...</div>
     <script>
@@ -41,7 +43,7 @@
           renderProducts('All');
         })
         .catch(err => {
-            document.getElementById('product-grid').innerText = "Error loading inventory.";
+            document.getElementById('product-grid').innerText = "Error loading inventory. Check your JSON format.";
             console.error(err);
         });
       function renderProducts(category) {
