@@ -1,134 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>PoppyseedLA | Developer & Reseller</title>
-    <style>
-        body {
-            background-color: #f8fafc;
-            color: #1e293b;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-        }
-        h1 { font-size: 3.5rem; margin-top: 2rem; color: #0f172a; letter-spacing: -2px; }
-        .grid {
-            display: flex;
-            gap: 30px;
-            max-width: 1000px;
-            padding: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            flex: 1;
-            min-width: 340px;
-            border: 1px solid #e2e8f0;
-            transition: transform 0.3s ease, border-color 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: #3b82f6;
-        }
-        .brand-logo {
-            width: 100%;
-            max-width: 220px;
-            height: 180px;
-            margin-bottom: 25px;
-            object-fit: contain;
-            display: block;
-        }
-        .app-store-badge {
-            width: 160px;
-            margin-top: 15px;
-            transition: transform 0.2s;
-        }
-        .app-store-badge:hover {
-            transform: scale(1.05);
-        }
-        h2 { color: #0f172a; margin-top: 0; margin-bottom: 15px; font-size: 2rem; }
-        p { line-height: 1.6; color: #64748b; margin-bottom: 20px; }
-        .btn {
-            display: inline-block;
-            margin-top: auto;
-            padding: 12px 28px;
-            background: #0f172a;
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-        .btn:hover {
-            background: #3b82f6;
-            transform: scale(1.05);
-        }
-        /* Social Footer Styling */
-        footer {
-            margin-top: 50px;
-            padding-bottom: 30px;
-        }
-        .social-links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-        .social-links a {
-            color: #64748b;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-        .social-links a:hover {
-            color: #3b82f6;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoppyseedLA | Vintage & Accessories</title>
 </head>
 <body>
 
-    <h1>PoppyseedLA</h1>
-    <p style="font-size: 1.25rem; color: #64748b; max-width: 600px;">Expert App Development & Sourcing Hard-to-Find Grails.</p>
+    <header style="text-align: center; padding: 50px;">
+        <h1>PoppyseedLA</h1>
+        <p>Curated vintage, accessories, and footwear.</p>
+    </header>
 
-    <div class="grid">
-        <div class="card">
-            <img src="PoppyseedLA24.png" alt="PoppyseedLA Dev Logo" class="brand-logo">
-            <h2>The Dev Lab</h2>
-            <p>A growing portfolio of iOS applications built natively with Xcode for the global market.</p>
+    <!-- Product Grid Container -->
+    <div id="product-grid" style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; justify-content: center;"></div>
+
+    <!-- Inventory Fetch Script -->
+    <script>
+      fetch('inventory.json')
+        .then(response => response.json())
+        .then(products => {
+          const grid = document.getElementById('product-grid');
+          
+          products.forEach(product => {
+            const card = document.createElement('div');
+            card.style.border = "1px solid #eee";
+            card.style.padding = "20px";
+            card.style.borderRadius = "8px";
+            card.style.width = "250px";
+            card.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
             
-            <a href="https://apps.apple.com/us/iphone/search?term=john%20dykheng" target="_blank">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="View on App Store" class="app-store-badge">
-            </a>
-        </div>
-
-        <div class="card">
-            <img src="vault-logo.jpeg" alt="PoppyseedLA Shop Logo" class="brand-logo">
-            <h2>The Vault</h2>
-            <p>Exclusive finds across all categories. From tech to collectibles, we source the best of everything.</p>
-            <a href="https://www.ebay.com/str/poppyseedla" target="_blank" class="btn">Shop Collection</a>
-        </div>
-    </div>
-
-    <footer>
-        <div class="social-links">
-            <a href="#">TikTok</a>
-            <a href="#">Instagram</a>
-            <a href="#">YouTube</a>
-        </div>
-        <p style="color: #94a3b8; font-size: 0.8rem;">&copy; 2026 PoppyseedLA. All rights reserved.</p>
-    </footer>
+            card.innerHTML = `
+              <h3 style="font-size: 16px; height: 40px; overflow: hidden;">${product["Product Name"]}</h3>
+              <p style="font-size: 18px; font-weight: bold; color: green;">$${product["Price"].toFixed(2)}</p>
+              <button style="background: black; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Buy Now</button>
+            `;
+            
+            grid.appendChild(card);
+          });
+        })
+        .catch(error => console.error('Error loading inventory:', error));
+    </script>
 
 </body>
 </html>
