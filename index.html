@@ -8,13 +8,19 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
         header { text-align: center; padding: 60px 20px; background: white; border-bottom: 1px solid #eee; }
         h1 { margin: 0; font-size: 2.5rem; letter-spacing: -1px; }
+        
+        /* Navigation Bar */
+        nav { display: flex; justify-content: center; gap: 20px; padding: 20px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
+        nav button { background: none; border: none; font-size: 1rem; cursor: pointer; color: #555; }
+        nav button:hover { color: #000; font-weight: bold; }
+
         #product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
         .product-card { background: white; border: 1px solid #e1e1e1; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; transition: transform 0.2s; }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .product-name { font-size: 14px; height: 3.6em; overflow: hidden; margin-bottom: 10px; line-height: 1.4; color: #333; }
         .product-price { font-size: 1.2rem; font-weight: 700; color: #000; margin-bottom: 20px; }
-        button { background: #000; color: #fff; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: auto; }
-        button:hover { background: #333; }
+        .buy-btn { background: #000; color: #fff; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: auto; }
+        .buy-btn:hover { background: #333; }
     </style>
 </head>
 <body>
@@ -24,24 +30,45 @@
         <p>Curated vintage, accessories, and footwear.</p>
     </header>
 
+    <nav>
+        <button onclick="renderProducts('All')">All</button>
+        <button onclick="renderProducts('Men')">Men</button>
+        <button onclick="renderProducts('Women')">Women</button>
+        <button onclick="renderProducts('Kids')">Kids</button>
+        <button onclick="renderProducts('Home')">Home</button>
+    </nav>
+
     <div id="product-grid"></div>
 
     <script>
+      let allProducts = [];
+
       fetch('inventory.json')
         .then(response => response.json())
-        .then(products => {
-          const grid = document.getElementById('product-grid');
-          products.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `
-              <div class="product-name">${product["Product Name"]}</div>
-              <div class="product-price">$${product["Price"].toFixed(2)}</div>
-              <button>Buy Now</button>
-            `;
-            grid.appendChild(card);
-          });
+        .then(data => {
+          allProducts = data;
+          renderProducts('All');
         });
+
+      function renderProducts(category) {
+        const grid = document.getElementById('product-grid');
+        grid.innerHTML = '';
+        
+        const filtered = (category === 'All') 
+          ? allProducts 
+          : allProducts.filter(p => p.Category === category);
+          
+        filtered.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <div class="product-name">${product["Product Name"]}</div>
+            <div class="product-price">$${product["Price"].toFixed(2)}</div>
+            <button class="buy-btn">Buy Now</button>
+          `;
+          grid.appendChild(card);
+        });
+      }
     </script>
 </body>
 </html>
