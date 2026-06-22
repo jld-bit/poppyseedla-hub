@@ -13,10 +13,10 @@
         nav button:hover { color: #000; font-weight: bold; }
         #product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
         .product-card { background: white; border: 1px solid #e1e1e1; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .product-image { width: 100%; height: 240px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background-color: #eaeaea; }
         .product-name { font-size: 14px; height: 3.6em; overflow: hidden; margin-bottom: 10px; line-height: 1.4; color: #333; }
         .product-price { font-size: 1.2rem; font-weight: 700; color: #000; margin-bottom: 20px; }
         
-        /* New Button Styles */
         .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
         .buy-btn { background: #000; color: #fff; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
         .buy-btn:hover { background: #333; }
@@ -42,10 +42,11 @@
     <div id="product-grid">Loading products...</div>
     <script>
       let allProducts = [];
-      
-      // CHANGE THIS TO YOUR ACTUAL EMAIL ADDRESS
-      const yourEmail = "customercare@poppyseedla.com"; 
+      const yourEmail = "hello@poppyseedla.com"; 
 
+      // Because your JSON doesn't have item numbers, we are going to add a temporary 
+      // fallback that looks for images based on the exact product name, formatted as a filename!
+      
       fetch('inventory.json')
         .then(response => response.json())
         .then(data => {
@@ -53,7 +54,7 @@
           renderProducts('All');
         })
         .catch(err => {
-            document.getElementById('product-grid').innerText = "Error loading inventory. Check your JSON format.";
+            document.getElementById('product-grid').innerText = "Error loading inventory.";
             console.error(err);
         });
 
@@ -66,11 +67,15 @@
           const card = document.createElement('div');
           card.className = 'product-card';
           
-          // Create the email subject and body for the offer button
           const emailSubject = encodeURIComponent(`Offer for ${product["Product Name"]}`);
           const emailBody = encodeURIComponent(`Hi PoppyseedLA,\n\nI would like to make an offer of $___ for the ${product["Product Name"]} (Listed at $${product["Price"].toFixed(2)}).\n\nThanks!`);
 
+          // Anti-Gravity Image Link: This creates a file name out of your product name!
+          // Example: "Nike Kobe 6" becomes "images/Nike Kobe 6.jpg"
+          const imageName = `images/${product["Product Name"]}.jpg`;
+
           card.innerHTML = `
+            <img src="${imageName}" alt="${product["Product Name"]}" class="product-image" onerror="this.style.display='none'">
             <div class="product-name">${product["Product Name"]}</div>
             <div class="product-price">$${product["Price"].toFixed(2)}</div>
             <div class="btn-group">
