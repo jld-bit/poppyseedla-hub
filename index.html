@@ -6,7 +6,6 @@
     <title>PoppyseedLA | Vintage & Accessories</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     
-    <!-- OFFICIAL SNIPCART INSTALLATION SCRIPT -->
     <script>
       window.SnipcartSettings = {
         publicApiKey: 'OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4',
@@ -115,6 +114,11 @@
         btn.setAttribute('data-item-shipping', p['Shipping']);
         btn.setAttribute('data-item-image', `images/${id}.jpg`);
         btn.setAttribute('data-item-url', "/");
+
+        // Force Snipcart to recognize the button
+        if (window.Snipcart) {
+            window.Snipcart.api.configure('show_cart_after_add', true);
+        }
         
         document.getElementById('modal-offer-btn').href = `mailto:customercare@poppyseedla.com?subject=Offer for ${p['Title']}`;
         document.getElementById('item-modal').style.display = 'flex';
