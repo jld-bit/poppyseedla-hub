@@ -5,23 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PoppyseedLA | Vintage & Accessories</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    
+    <!-- SNIPCART STYLES -->
+    <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.css" />
+
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
         
-        /* BANNER STYLES */
-        .top-banner {
-            background-color: #fff200;
-            color: #000;
-            text-align: center;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .top-banner { background-color: #fff200; color: #000; text-align: center; padding: 10px 20px; font-size: 14px; font-weight: 600; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; }
         .ebay-logo { height: 18px; margin-top: 2px; }
         .top-banner a { display: inline-flex; align-items: center; transition: opacity 0.2s; text-decoration: none; }
         .top-banner a:hover { opacity: 0.7; }
@@ -48,7 +39,7 @@
         .offer-btn { background: #fff; color: #000; padding: 12px; border: 2px solid #000; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; text-align: center; display: block; box-sizing: border-box;}
         .offer-btn:hover { background: #f0f0f0; }
 
-        /* UPGRADED POP-UP STYLES */
+        /* POP-UP STYLES */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; text-align: left; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; border: none; background: none; font-weight: bold; color: #aaa; }
@@ -87,7 +78,7 @@
     </nav>
     <div id="product-grid">Loading inventory from CSV...</div>
 
-    <!-- UPGRADED POP-UP MENU -->
+    <!-- POP-UP MENU -->
     <div id="item-modal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="close-btn" onclick="closeModal()">&times;</button>
@@ -98,16 +89,12 @@
                 <div id="modal-price" class="modal-price">$0.00</div>
             </div>
 
-            <div id="modal-details-grid" class="modal-details-grid">
-                <!-- Details will populate here automatically -->
-            </div>
-
-            <div id="modal-description" class="modal-description">
-                <!-- Description will populate here automatically -->
-            </div>
+            <div id="modal-details-grid" class="modal-details-grid"></div>
+            <div id="modal-description" class="modal-description"></div>
 
             <div class="btn-group">
-                <button class="buy-btn" onclick="alert('Checkout link coming soon!')">Buy Now</button>
+                <!-- THIS IS YOUR NEW SECURE SNIPCART BUTTON -->
+                <button id="modal-buy-btn" class="buy-btn snipcart-add-item">Buy Now</button>
                 <a id="modal-offer-btn" href="#" style="text-decoration: none;">
                     <div class="offer-btn">Make Offer</div>
                 </a>
@@ -182,6 +169,7 @@
           if (!product) return;
 
           const price = parseFloat(product["Start price"] || product["Current price"] || 0).toFixed(2);
+          const safeTitle = product["Title"].replace(/"/g, '&quot;');
           
           document.getElementById('modal-title').innerText = product["Title"];
           document.getElementById('modal-price').innerText = "$" + price;
@@ -196,27 +184,30 @@
               }
           };
 
-          // Build the Smart Details Grid!
           let detailsHTML = "";
           let cat = assignCategory(product["Title"]);
           detailsHTML += `<div><strong>Category:</strong> ${cat}</div>`;
-          
           if (product["Condition"]) detailsHTML += `<div><strong>Condition:</strong> ${product["Condition"]}</div>`;
           if (product["Brand"]) detailsHTML += `<div><strong>Brand:</strong> ${product["Brand"]}</div>`;
           if (product["Size"]) detailsHTML += `<div><strong>Size:</strong> ${product["Size"]}</div>`;
           if (product["Color"]) detailsHTML += `<div><strong>Color:</strong> ${product["Color"]}</div>`;
-          
           document.getElementById('modal-details-grid').innerHTML = detailsHTML;
 
-          // Build the Description!
           let desc = product["Description"] || product["Item description"] || "See photos for full item condition and details.";
-          // Remove messy HTML tags if eBay included them
           desc = desc.replace(/<[^>]*>?/gm, ''); 
           document.getElementById('modal-description').innerHTML = `<strong>Item Description:</strong><br><br>${desc}`;
 
           const emailSubject = encodeURIComponent(`Offer for ${product["Title"]}`);
           const emailBody = encodeURIComponent(`Hi PoppyseedLA,\n\nI would like to make an offer of $___ for the ${product["Title"]} (Listed at $${price}).\n\nThanks!`);
           document.getElementById('modal-offer-btn').href = `mailto:${yourEmail}?subject=${emailSubject}&body=${emailBody}`;
+
+          // THIS FEEDS THE ITEM INFO TO THE SHOPPING CART
+          const buyBtn = document.getElementById('modal-buy-btn');
+          buyBtn.setAttribute("data-item-id", product["Item number"]);
+          buyBtn.setAttribute("data-item-price", price);
+          buyBtn.setAttribute("data-item-url", "/");
+          buyBtn.setAttribute("data-item-name", product["Title"]);
+          buyBtn.setAttribute("data-item-image", `images/${itemNumber}.jpg`);
 
           document.getElementById('item-modal').style.display = 'flex';
       }
@@ -227,5 +218,10 @@
           }
       }
     </script>
+
+    <!-- SNIPCART INSTALLATION SCRIPTS -->
+    <script async src="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.js"></script>
+    <div hidden id="snipcart" data-api-key="OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4
+"></div>
 </body>
 </html>
