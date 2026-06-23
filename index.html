@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PoppyseedLA | Vintage & Accessories</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.css" />
+    
+    <!-- SNIPCART CONFIGURATION -->
+    <script>
+      window.SnipcartSettings = {
+        publicApiKey: "OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4",
+        loadStrategy: 'on-user-interaction',
+      };
+      (function(){var c,d;if(window.SnipcartSettings.loadStrategy!=="on-user-interaction"||(!window.localStorage.getItem("snipcart-authed")&&!window.location.search.includes("snipcart-interaction"))){var a=document.getElementsByTagName("head")[0];a.appendChild(c=document.createElement("link"));c.rel="stylesheet";c.href="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.css";c.type="text/css";a.appendChild(d=document.createElement("script"));d.src="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.js";d.async=true}else{window.addEventListener("mouseover",b);window.addEventListener("touchstart",b)}function b(){window.removeEventListener("mouseover",b);window.removeEventListener("touchstart",b);var a=document.getElementsByTagName("head")[0];a.appendChild(c=document.createElement("link"));c.rel="stylesheet";c.href="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.css";c.type="text/css";a.appendChild(d=document.createElement("script"));d.src="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.js";d.async=true}})();
+    </script>
+
     <style>
         body { font-family: -apple-system, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
         .top-banner { background-color: #fff200; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 10px; }
@@ -17,7 +26,6 @@
         #product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
         .product-card { background: white; border: 1px solid #e1e1e1; padding: 20px; border-radius: 12px; }
         .product-image { width: 100%; height: 240px; object-fit: cover; border-radius: 8px; cursor: pointer; }
-        
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; border: none; background: none; font-weight: bold; color: #555; }
@@ -43,7 +51,6 @@
         <button onclick="renderProducts('Home')">Home</button>
         <button onclick="renderProducts('Electronics')">Electronics</button>
     </nav>
-
     <div id="product-grid"></div>
 
     <div id="item-modal" class="modal" onclick="closeModal(event)">
@@ -98,8 +105,8 @@
         
         const thumbs = document.getElementById('thumbs');
         thumbs.innerHTML = `<img src="images/${id}.jpg" class="thumb" onclick="changeImg('images/${id}.jpg')">`;
-        if(p['Image2']) thumbs.innerHTML += `<img src="images/${p['Image2']}" class="thumb" onclick="changeImg('images/${p['Image2']}')">`;
-        if(p['Image3']) thumbs.innerHTML += `<img src="images/${p['Image3']}" class="thumb" onclick="changeImg('images/${p['Image3']}')">`;
+        if(p['Image2'] && p['Image2'].trim() !== '') thumbs.innerHTML += `<img src="images/${p['Image2']}" class="thumb" onclick="changeImg('images/${p['Image2']}')">`;
+        if(p['Image3'] && p['Image3'].trim() !== '') thumbs.innerHTML += `<img src="images/${p['Image3']}" class="thumb" onclick="changeImg('images/${p['Image3']}')">`;
         
         const btn = document.getElementById('buy-btn');
         btn.setAttribute('data-item-id', id);
@@ -107,6 +114,7 @@
         btn.setAttribute('data-item-price', p['Start price']);
         btn.setAttribute('data-item-shipping', p['Shipping']);
         btn.setAttribute('data-item-image', `images/${id}.jpg`);
+        btn.setAttribute('data-item-url', "/");
         
         document.getElementById('modal-offer-btn').href = `mailto:customercare@poppyseedla.com?subject=Offer for ${p['Title']}`;
         document.getElementById('item-modal').style.display = 'flex';
@@ -115,8 +123,6 @@
       function changeImg(src) { document.getElementById('main-img').src = src; }
       function closeModal(e) { if(e.target.id === 'item-modal') document.getElementById('item-modal').style.display = 'none'; }
     </script>
-    <script async src="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.js"></script>
-    <div hidden id="snipcart" data-api-key="OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4
-"></div>
+    <div hidden id="snipcart" data-api-key="OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4"></div>
 </body>
 </html>
