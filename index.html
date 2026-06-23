@@ -4,9 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PoppyseedLA | Vintage & Accessories</title>
+    <!-- This tiny script lets your website read CSV files! -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+        
+        /* NEW BANNER STYLES */
+        .top-banner {
+            background-color: #fff200; /* Fun, energetic yellow! */
+            color: #000;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .ebay-logo { height: 18px; margin-top: 2px; }
+        .top-banner a { display: inline-flex; align-items: center; transition: opacity 0.2s; text-decoration: none; }
+        .top-banner a:hover { opacity: 0.7; }
+
         header { text-align: center; padding: 60px 20px; background: white; border-bottom: 1px solid #eee; }
         h1 { margin: 0; font-size: 2.5rem; letter-spacing: -1px; }
         nav { display: flex; justify-content: center; gap: 15px; padding: 20px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
@@ -26,6 +46,14 @@
     </style>
 </head>
 <body>
+    <!-- NEW BANNER CODE -->
+    <div class="top-banner">
+        <span>Website is still in progress! Shop our full store on</span>
+        <a href="https://www.ebay.com/str/poppyseedla" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg" alt="eBay" class="ebay-logo">
+        </a>
+    </div>
+
     <header>
         <h1>PoppyseedLA</h1>
         <p>Curated vintage, accessories, and footwear.</p>
@@ -86,7 +114,6 @@
           const emailSubject = encodeURIComponent(`Offer for ${product["Title"]}`);
           const emailBody = encodeURIComponent(`Hi PoppyseedLA,\n\nI would like to make an offer of $___ for the ${product["Title"]} (Listed at $${price}).\n\nThanks!`);
 
-          // MAGIC TRICK: This tries the .jpg first. If it fails, it tries the .webp automatically!
           card.innerHTML = `
             <img src="images/${product["Item number"]}.jpg" 
                  alt="${safeTitle}" 
