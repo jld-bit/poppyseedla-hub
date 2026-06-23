@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.css" />
     <style>
         body { font-family: -apple-system, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
-        .top-banner { background-color: #fff200; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; }
+        .top-banner { background-color: #fff200; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .ebay-logo { height: 20px; }
         header { text-align: center; padding: 40px; background: white; }
-        nav { display: flex; justify-content: center; gap: 15px; padding: 15px; background: white; border-bottom: 1px solid #eee; }
+        nav { display: flex; justify-content: center; gap: 15px; padding: 15px; background: white; border-bottom: 1px solid #eee; flex-wrap: wrap; }
         nav button { background: none; border: none; font-size: 1rem; cursor: pointer; color: #555; }
         nav button:hover { color: #000; font-weight: bold; }
         #product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
@@ -28,12 +29,19 @@
     </style>
 </head>
 <body>
-    <div class="top-banner">Shop our full store on <a href="https://www.ebay.com/str/poppyseedla">eBay</a></div>
+    <div class="top-banner">
+        <span>Shop our full store on</span>
+        <a href="https://www.ebay.com/str/poppyseedla"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg" alt="eBay" class="ebay-logo"></a>
+    </div>
     <header><h1>PoppyseedLA</h1></header>
     <nav>
         <button onclick="renderProducts('All')">All</button>
         <button onclick="renderProducts('Apparel')">Apparel</button>
         <button onclick="renderProducts('Footwear')">Footwear</button>
+        <button onclick="renderProducts('Accessories')">Accessories</button>
+        <button onclick="renderProducts('Kids')">Kids</button>
+        <button onclick="renderProducts('Home')">Home</button>
+        <button onclick="renderProducts('Electronics')">Electronics</button>
     </nav>
 
     <div id="product-grid"></div>
@@ -57,10 +65,22 @@
       let allProducts = [];
       Papa.parse("inventory.csv", { download: true, header: true, complete: (results) => { allProducts = results.data.filter(p => p['Item number']); renderProducts('All'); } });
 
-      function renderProducts(cat) {
+      function assignCategory(title) {
+          const t = title.toLowerCase();
+          if (t.match(/nike|jordan|shoes|sneakers|cleats|boots|sandals|heels/)) return 'Footwear';
+          if (t.match(/jacket|coat|hoodie|sweater|blazer|shirt|dress|skort|pants|jeans|shorts|scrub/)) return 'Apparel';
+          if (t.match(/hat|cap|bag|wallet|sock|sunglasses|tie|scarf|purse/)) return 'Accessories';
+          if (t.match(/lego|toy|doll|game|figure|plush|kids/)) return 'Kids';
+          if (t.match(/coffee|mug|lantern|home|decor|plant|village/)) return 'Home';
+          if (t.match(/printer|receiver|electronics|adaptor/)) return 'Electronics';
+          return 'Other';
+      }
+
+      function renderProducts(category) {
         const grid = document.getElementById('product-grid');
         grid.innerHTML = '';
-        allProducts.forEach(p => {
+        const filtered = (category === 'All') ? allProducts : allProducts.filter(p => assignCategory(p['Title']) === category);
+        filtered.forEach(p => {
           grid.innerHTML += `<div class="product-card">
             <img src="images/${p['Item number']}.jpg" class="product-image" onclick="openModal('${p['Item number']}')">
             <h3>${p['Title']}</h3>
