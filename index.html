@@ -3,223 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PoppyseedLA | Vintage & Accessories</title>
+    <title>PoppyseedLA | Store</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    
-    <!-- SNIPCART STYLES -->
     <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.css" />
-
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
-        
-        .top-banner { background-color: #fff200; color: #000; text-align: center; padding: 10px 20px; font-size: 14px; font-weight: 600; display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .ebay-logo { height: 18px; margin-top: 2px; }
-        .top-banner a { display: inline-flex; align-items: center; transition: opacity 0.2s; text-decoration: none; }
-        .top-banner a:hover { opacity: 0.7; }
-
-        header { text-align: center; padding: 60px 20px; background: white; border-bottom: 1px solid #eee; }
-        h1 { margin: 0; font-size: 2.5rem; letter-spacing: -1px; }
-        nav { display: flex; justify-content: center; gap: 15px; padding: 20px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
-        nav button { background: none; border: none; font-size: 1rem; cursor: pointer; color: #555; padding: 5px 10px; }
-        nav button:hover { color: #000; font-weight: bold; }
-        
+        body { font-family: -apple-system, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
         #product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
-        .product-card { background: white; border: 1px solid #e1e1e1; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .product-card { background: white; border: 1px solid #e1e1e1; padding: 20px; border-radius: 12px; }
+        .product-image { width: 100%; height: 240px; object-fit: cover; border-radius: 8px; cursor: pointer; }
         
-        .clickable-item { cursor: pointer; transition: opacity 0.2s; }
-        .clickable-item:hover { opacity: 0.8; }
-        
-        .product-image { width: 100%; height: 240px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background-color: #eaeaea; }
-        .product-name { font-size: 14px; height: 3.6em; overflow: hidden; margin-bottom: 10px; line-height: 1.4; color: #333; }
-        .product-price { font-size: 1.2rem; font-weight: 700; color: #000; margin-bottom: 20px; }
-        
-        .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
-        .buy-btn { background: #000; color: #fff; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .buy-btn:hover { background: #333; }
-        .offer-btn { background: #fff; color: #000; padding: 12px; border: 2px solid #000; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; text-align: center; display: block; box-sizing: border-box;}
-        .offer-btn:hover { background: #f0f0f0; }
-
-        /* POP-UP STYLES */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; text-align: left; }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; border: none; background: none; font-weight: bold; color: #aaa; }
-        .close-btn:hover { color: #000; }
-        
-        .modal-header-section { text-align: center; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
-        .modal-img { width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px; margin-bottom: 15px; background-color: #eaeaea; }
-        .modal-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 10px; line-height: 1.4; color: #333; }
-        .modal-price { font-size: 1.6rem; font-weight: 700; color: #000; }
-        
-        .modal-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; font-size: 14px; color: #444; background: #f9f9f9; padding: 15px; border-radius: 8px; }
-        .modal-description { font-size: 14px; line-height: 1.6; color: #555; margin-bottom: 20px; white-space: pre-wrap; }
-        .modal-shipping { font-size: 13px; color: #666; text-align: center; margin-top: 15px; font-style: italic; }
+        /* Modal & Gallery */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .gallery-main { width: 100%; height: 300px; object-fit: contain; margin-bottom: 15px; }
+        .gallery-thumbs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .thumb { width: 60px; height: 60px; object-fit: cover; cursor: pointer; border: 2px solid transparent; }
+        .thumb:hover { border-color: #000; }
+        .buy-btn { background: #000; color: #fff; padding: 15px; border: none; width: 100%; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="top-banner">
-        <span>Website is still in progress! Shop our full store on</span>
-        <a href="https://www.ebay.com/str/poppyseedla" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg" alt="eBay" class="ebay-logo">
-        </a>
-    </div>
+    <div id="product-grid"></div>
 
-    <header>
-        <h1>PoppyseedLA</h1>
-        <p>Curated vintage, accessories, and footwear.</p>
-    </header>
-    <nav>
-        <button onclick="renderProducts('All')">All</button>
-        <button onclick="renderProducts('Apparel')">Apparel</button>
-        <button onclick="renderProducts('Footwear')">Footwear</button>
-        <button onclick="renderProducts('Accessories')">Accessories</button>
-        <button onclick="renderProducts('Kids')">Kids</button>
-        <button onclick="renderProducts('Home')">Home</button>
-        <button onclick="renderProducts('Electronics')">Electronics</button>
-    </nav>
-    <div id="product-grid">Loading inventory from CSV...</div>
-
-    <!-- POP-UP MENU -->
     <div id="item-modal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-btn" onclick="closeModal()">&times;</button>
-            
-            <div class="modal-header-section">
-                <img id="modal-img" src="" alt="Product Image" class="modal-img">
-                <div id="modal-title" class="modal-title">Title Here</div>
-                <div id="modal-price" class="modal-price">$0.00</div>
-            </div>
-
-            <div id="modal-details-grid" class="modal-details-grid"></div>
-            <div id="modal-description" class="modal-description"></div>
-
-            <div class="btn-group">
-                <!-- THIS IS YOUR NEW SECURE SNIPCART BUTTON -->
-                <button id="modal-buy-btn" class="buy-btn snipcart-add-item">Buy Now</button>
-                <a id="modal-offer-btn" href="#" style="text-decoration: none;">
-                    <div class="offer-btn">Make Offer</div>
-                </a>
-            </div>
-            
-            <div class="modal-shipping">📦 Ships securely from Los Angeles, CA</div>
+            <img id="main-img" class="gallery-main" src="">
+            <div id="thumbs" class="gallery-thumbs"></div>
+            <h2 id="modal-title"></h2>
+            <p id="modal-price"></p>
+            <p id="modal-details"></p>
+            <p id="modal-desc"></p>
+            <button id="buy-btn" class="buy-btn snipcart-add-item">Buy Now</button>
         </div>
     </div>
 
     <script>
       let allProducts = [];
-      const yourEmail = "customercare@poppyseedla.com"; 
+      Papa.parse("inventory.csv", { download: true, header: true, complete: (results) => { allProducts = results.data; renderProducts(); } });
 
-      Papa.parse("inventory.csv", {
-          download: true,
-          header: true,
-          complete: function(results) {
-              allProducts = results.data.filter(item => item["Title"]); 
-              renderProducts('All');
-          },
-          error: function(err) {
-              document.getElementById('product-grid').innerText = "Error loading inventory.csv.";
-          }
-      });
-
-      function assignCategory(title) {
-          const t = title.toLowerCase();
-          if (t.match(/nike|jordan|shoes|sneakers|cleats|boots|sandals|heels/)) return 'Footwear';
-          if (t.match(/jacket|coat|hoodie|sweater|blazer|shirt|dress|skort|pants|jeans|shorts|scrub/)) return 'Apparel';
-          if (t.match(/hat|cap|bag|wallet|sock|sunglasses|tie|scarf|purse/)) return 'Accessories';
-          if (t.match(/lego|toy|doll|game|figure|plush|kids/)) return 'Kids';
-          if (t.match(/coffee|mug|lantern|home|decor|plant|village/)) return 'Home';
-          if (t.match(/printer|receiver|electronics|adaptor/)) return 'Electronics';
-          return 'Other';
-      }
-
-      function renderProducts(category) {
+      function renderProducts() {
         const grid = document.getElementById('product-grid');
-        grid.innerHTML = '';
-        
-        const filtered = allProducts.filter(p => {
-            if (category === 'All') return true;
-            return assignCategory(p["Title"]) === category;
-        });
-        
-        filtered.forEach(product => {
-          const card = document.createElement('div');
-          card.className = 'product-card';
-          
-          const price = parseFloat(product["Start price"] || product["Current price"] || 0).toFixed(2);
-          const safeTitle = product["Title"].replace(/"/g, '&quot;');
-
-          card.innerHTML = `
-            <div class="clickable-item" onclick="openModal('${product["Item number"]}')">
-                <img src="images/${product["Item number"]}.jpg" 
-                     alt="${safeTitle}" 
-                     class="product-image" 
-                     onerror="if(!this.dataset.retried){this.dataset.retried=true; this.src='images/${product["Item number"]}.webp';} else {this.style.display='none';}">
-                <div class="product-name">${product["Title"]}</div>
-                <div class="product-price">$${price}</div>
-            </div>
-            <div class="btn-group">
-                <button class="offer-btn" onclick="openModal('${product["Item number"]}')">View Details</button>
-            </div>
-          `;
-          grid.appendChild(card);
+        allProducts.forEach(p => {
+          grid.innerHTML += `<div class="product-card">
+            <img src="images/${p['Item number']}.jpg" class="product-image" onclick="openModal('${p['Item number']}')">
+            <h3>${p['Title']}</h3>
+            <p>$${p['Start price']}</p>
+          </div>`;
         });
       }
 
-      function openModal(itemNumber) {
-          const product = allProducts.find(p => p["Item number"] === itemNumber);
-          if (!product) return;
-
-          const price = parseFloat(product["Start price"] || product["Current price"] || 0).toFixed(2);
-          const safeTitle = product["Title"].replace(/"/g, '&quot;');
-          
-          document.getElementById('modal-title').innerText = product["Title"];
-          document.getElementById('modal-price').innerText = "$" + price;
-
-          const modalImg = document.getElementById('modal-img');
-          modalImg.dataset.retried = ""; 
-          modalImg.src = `images/${itemNumber}.jpg`;
-          modalImg.onerror = function() {
-              if(!this.dataset.retried){
-                  this.dataset.retried = true; 
-                  this.src = `images/${itemNumber}.webp`;
-              }
-          };
-
-          let detailsHTML = "";
-          let cat = assignCategory(product["Title"]);
-          detailsHTML += `<div><strong>Category:</strong> ${cat}</div>`;
-          if (product["Condition"]) detailsHTML += `<div><strong>Condition:</strong> ${product["Condition"]}</div>`;
-          if (product["Brand"]) detailsHTML += `<div><strong>Brand:</strong> ${product["Brand"]}</div>`;
-          if (product["Size"]) detailsHTML += `<div><strong>Size:</strong> ${product["Size"]}</div>`;
-          if (product["Color"]) detailsHTML += `<div><strong>Color:</strong> ${product["Color"]}</div>`;
-          document.getElementById('modal-details-grid').innerHTML = detailsHTML;
-
-          let desc = product["Description"] || product["Item description"] || "See photos for full item condition and details.";
-          desc = desc.replace(/<[^>]*>?/gm, ''); 
-          document.getElementById('modal-description').innerHTML = `<strong>Item Description:</strong><br><br>${desc}`;
-
-          const emailSubject = encodeURIComponent(`Offer for ${product["Title"]}`);
-          const emailBody = encodeURIComponent(`Hi PoppyseedLA,\n\nI would like to make an offer of $___ for the ${product["Title"]} (Listed at $${price}).\n\nThanks!`);
-          document.getElementById('modal-offer-btn').href = `mailto:${yourEmail}?subject=${emailSubject}&body=${emailBody}`;
-
-          // THIS FEEDS THE ITEM INFO TO THE SHOPPING CART
-          const buyBtn = document.getElementById('modal-buy-btn');
-          buyBtn.setAttribute("data-item-id", product["Item number"]);
-          buyBtn.setAttribute("data-item-price", price);
-          buyBtn.setAttribute("data-item-url", "/");
-          buyBtn.setAttribute("data-item-name", product["Title"]);
-          buyBtn.setAttribute("data-item-image", `images/${itemNumber}.jpg`);
-
-          document.getElementById('item-modal').style.display = 'flex';
+      function openModal(id) {
+        const p = allProducts.find(x => x['Item number'] === id);
+        document.getElementById('main-img').src = `images/${id}.jpg`;
+        document.getElementById('modal-title').innerText = p['Title'];
+        document.getElementById('modal-price').innerText = `Price: $${p['Start price']} | Shipping: $${p['Shipping']}`;
+        document.getElementById('modal-details').innerText = `${p['Brand']} - ${p['Size']} - ${p['Color']} - ${p['Condition']}`;
+        document.getElementById('modal-desc').innerText = p['Description'];
+        
+        // Gallery logic
+        const thumbs = document.getElementById('thumbs');
+        thumbs.innerHTML = `<img src="images/${id}.jpg" class="thumb" onclick="changeImg('images/${id}.jpg')">`;
+        if(p['Image2']) thumbs.innerHTML += `<img src="images/${p['Image2']}" class="thumb" onclick="changeImg('images/${p['Image2']}')">`;
+        if(p['Image3']) thumbs.innerHTML += `<img src="images/${p['Image3']}" class="thumb" onclick="changeImg('images/${p['Image3']}')">`;
+        
+        // Snipcart Button
+        const btn = document.getElementById('buy-btn');
+        btn.setAttribute('data-item-id', id);
+        btn.setAttribute('data-item-name', p['Title']);
+        btn.setAttribute('data-item-price', p['Start price']);
+        btn.setAttribute('data-item-shipping', p['Shipping']);
+        btn.setAttribute('data-item-image', `images/${id}.jpg`);
+        
+        document.getElementById('item-modal').style.display = 'flex';
       }
 
-      function closeModal(event) {
-          if (!event || event.target.id === 'item-modal' || event.target.className === 'close-btn') {
-              document.getElementById('item-modal').style.display = 'none';
-          }
-      }
+      function changeImg(src) { document.getElementById('main-img').src = src; }
+      function closeModal(e) { if(e.target.id === 'item-modal') document.getElementById('item-modal').style.display = 'none'; }
     </script>
-
-    <!-- SNIPCART INSTALLATION SCRIPTS -->
     <script async src="https://cdn.snipcart.com/themes/v3.4.1/default/snipcart.js"></script>
     <div hidden id="snipcart" data-api-key="OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4
 "></div>
