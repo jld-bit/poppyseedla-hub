@@ -30,7 +30,8 @@
         .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; }
         .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; border: none; background: none; font-weight: bold; color: #555; }
         .gallery-main { width: 100%; height: 300px; object-fit: contain; margin-bottom: 15px; }
-        .buy-btn { background: #000; color: #fff; padding: 15px; border: none; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+        .buy-btn { background: #000; color: #fff; padding: 15px; border: none; font-weight: bold; cursor: pointer; flex: 2; }
+        .offer-btn { background: #fff; border: 2px solid #000; padding: 15px; font-weight: bold; cursor: pointer; flex: 1; text-align: center; color: #000; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -56,8 +57,12 @@
             <img id="main-img" class="gallery-main" src="">
             <h2 id="modal-title"></h2>
             <p id="modal-price"></p>
+            <p id="modal-details"></p>
             <p id="modal-desc"></p>
-            <button id="buy-btn" class="buy-btn snipcart-add-item">Add to Cart</button>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="buy-btn" class="buy-btn snipcart-add-item">Add to Cart</button>
+                <a id="modal-offer-btn" href="#" class="offer-btn">Make Offer</a>
+            </div>
         </div>
     </div>
 
@@ -93,7 +98,8 @@
         const p = allProducts.find(x => x['Item number'] === id);
         document.getElementById('main-img').src = `images/${id}.jpg`;
         document.getElementById('modal-title').innerText = p['Title'];
-        document.getElementById('modal-price').innerText = `Price: $${p['Start price']}`;
+        document.getElementById('modal-price').innerText = `Price: $${p['Start price']} | Shipping: $${p['Shipping']}`;
+        document.getElementById('modal-details').innerText = `${p['Brand']} - ${p['Size']} - ${p['Color']} - ${p['Condition']}`;
         document.getElementById('modal-desc').innerText = p['Description'];
         
         const btn = document.getElementById('buy-btn');
@@ -103,6 +109,7 @@
         btn.setAttribute('data-item-url', window.location.href);
         btn.setAttribute('data-item-image', `images/${id}.jpg`);
         
+        document.getElementById('modal-offer-btn').href = `mailto:customercare@poppyseedla.com?subject=Offer for ${p['Title']}`;
         document.getElementById('item-modal').style.display = 'flex';
       }
 
