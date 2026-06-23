@@ -9,9 +9,9 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
         
-        /* NEW BANNER STYLES */
+        /* BANNER STYLES */
         .top-banner {
-            background-color: #fff200; /* Fun, energetic yellow! */
+            background-color: #fff200;
             color: #000;
             text-align: center;
             padding: 10px 20px;
@@ -32,8 +32,14 @@
         nav { display: flex; justify-content: center; gap: 15px; padding: 20px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
         nav button { background: none; border: none; font-size: 1rem; cursor: pointer; color: #555; padding: 5px 10px; }
         nav button:hover { color: #000; font-weight: bold; }
+        
         #product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
         .product-card { background: white; border: 1px solid #e1e1e1; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; transition: transform 0.2s; }
+        
+        /* Clickable Item Hover */
+        .clickable-item { cursor: pointer; transition: opacity 0.2s; }
+        .clickable-item:hover { opacity: 0.8; }
+        
         .product-image { width: 100%; height: 240px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background-color: #eaeaea; }
         .product-name { font-size: 14px; height: 3.6em; overflow: hidden; margin-bottom: 10px; line-height: 1.4; color: #333; }
         .product-price { font-size: 1.2rem; font-weight: 700; color: #000; margin-bottom: 20px; }
@@ -41,12 +47,21 @@
         .btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
         .buy-btn { background: #000; color: #fff; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
         .buy-btn:hover { background: #333; }
-        .offer-btn { background: #fff; color: #000; padding: 12px; border: 2px solid #000; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .offer-btn { background: #fff; color: #000; padding: 12px; border: 2px solid #000; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; text-align: center; display: block; box-sizing: border-box;}
         .offer-btn:hover { background: #f0f0f0; }
+
+        /* POP-UP (MODAL) STYLES */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 100%; position: relative; max-height: 90vh; overflow-y: auto; text-align: center; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; border: none; background: none; font-weight: bold; color: #aaa; }
+        .close-btn:hover { color: #000; }
+        .modal-img { width: 100%; max-height: 400px; object-fit: contain; border-radius: 8px; margin-bottom: 20px; background-color: #eaeaea; }
+        .modal-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; line-height: 1.4; color: #333; }
+        .modal-price { font-size: 1.5rem; font-weight: 700; margin-bottom: 25px; color: #000; }
     </style>
 </head>
 <body>
-    <!-- NEW BANNER CODE -->
+    <!-- BANNER -->
     <div class="top-banner">
         <span>Website is still in progress! Shop our full store on</span>
         <a href="https://www.ebay.com/str/poppyseedla" target="_blank">
@@ -68,11 +83,27 @@
         <button onclick="renderProducts('Electronics')">Electronics</button>
     </nav>
     <div id="product-grid">Loading inventory from CSV...</div>
+
+    <!-- THIS IS THE HIDDEN POP-UP MENU -->
+    <div id="item-modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <img id="modal-img" src="" alt="Product Image" class="modal-img">
+            <div id="modal-title" class="modal-title">Title Here</div>
+            <div id="modal-price" class="modal-price">$0.00</div>
+            <div class="btn-group">
+                <button class="buy-btn" onclick="alert('Checkout link coming soon!')">Buy Now</button>
+                <a id="modal-offer-btn" href="#" style="text-decoration: none;">
+                    <div class="offer-btn">Make Offer</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
       let allProducts = [];
-      const yourEmail = "customercare@poppyseedla.com";
+      const yourEmail = "customercare@poppyseedla.com"; 
 
-      // Read the CSV directly!
       Papa.parse("inventory.csv", {
           download: true,
           header: true,
@@ -111,25 +142,61 @@
           
           const price = parseFloat(product["Start price"] || product["Current price"] || 0).toFixed(2);
           const safeTitle = product["Title"].replace(/"/g, '&quot;');
-          const emailSubject = encodeURIComponent(`Offer for ${product["Title"]}`);
-          const emailBody = encodeURIComponent(`Hi PoppyseedLA,\n\nI would like to make an offer of $___ for the ${product["Title"]} (Listed at $${price}).\n\nThanks!`);
 
           card.innerHTML = `
-            <img src="images/${product["Item number"]}.jpg" 
-                 alt="${safeTitle}" 
-                 class="product-image" 
-                 onerror="if(!this.dataset.retried){this.dataset.retried=true; this.src='images/${product["Item number"]}.webp';} else {this.style.display='none';}">
-            <div class="product-name">${product["Title"]}</div>
-            <div class="product-price">$${price}</div>
+            <div class="clickable-item" onclick="openModal('${product["Item number"]}')">
+                <img src="images/${product["Item number"]}.jpg" 
+                     alt="${safeTitle}" 
+                     class="product-image" 
+                     onerror="if(!this.dataset.retried){this.dataset.retried=true; this.src='images/${product["Item number"]}.webp';} else {this.style.display='none';}">
+                <div class="product-name">${product["Title"]}</div>
+                <div class="product-price">$${price}</div>
+            </div>
             <div class="btn-group">
-                <button class="buy-btn" onclick="alert('Checkout link coming soon!')">Buy Now</button>
-                <a href="mailto:${yourEmail}?subject=${emailSubject}&body=${emailBody}" style="text-decoration: none;">
-                    <button class="offer-btn">Make Offer</button>
-                </a>
+                <button class="offer-btn" onclick="openModal('${product["Item number"]}')">View Details</button>
             </div>
           `;
           grid.appendChild(card);
         });
+      }
+
+      // THIS FUNCTION MAKES THE POP-UP APPEAR
+      function openModal(itemNumber) {
+          const product = allProducts.find(p => p["Item number"] === itemNumber);
+          if (!product) return;
+
+          const price = parseFloat(product["Start price"] || product["Current price"] || 0).toFixed(2);
+          const safeTitle = product["Title"].replace(/"/g, '&quot;');
+
+          // Set up the modal content
+          document.getElementById('modal-title').innerText = product["Title"];
+          document.getElementById('modal-price').innerText = "$" + price;
+
+          // Set up the image logic for the modal
+          const modalImg = document.getElementById('modal-img');
+          modalImg.dataset.retried = ""; // Reset the retry tracker
+          modalImg.src = `images/${itemNumber}.jpg`;
+          modalImg.onerror = function() {
+              if(!this.dataset.retried){
+                  this.dataset.retried = true; 
+                  this.src = `images/${itemNumber}.webp`;
+              }
+          };
+
+          // Set up the email for Make Offer
+          const emailSubject = encodeURIComponent(`Offer for ${product["Title"]}`);
+          const emailBody = encodeURIComponent(`Hi PoppyseedLA,\n\nI would like to make an offer of $___ for the ${product["Title"]} (Listed at $${price}).\n\nThanks!`);
+          document.getElementById('modal-offer-btn').href = `mailto:${yourEmail}?subject=${emailSubject}&body=${emailBody}`;
+
+          // Show the pop-up!
+          document.getElementById('item-modal').style.display = 'flex';
+      }
+
+      // THIS FUNCTION CLOSES THE POP-UP
+      function closeModal(event) {
+          if (!event || event.target.id === 'item-modal' || event.target.className === 'close-btn') {
+              document.getElementById('item-modal').style.display = 'none';
+          }
       }
     </script>
 </body>
