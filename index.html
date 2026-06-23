@@ -96,10 +96,12 @@
 
       function openModal(id) {
         const p = allProducts.find(x => x['Item number'] === id);
+        if(!p) return;
+
         document.getElementById('main-img').src = `images/${id}.jpg`;
         document.getElementById('modal-title').innerText = p['Title'];
         document.getElementById('modal-price').innerText = `Price: $${p['Start price']} | Shipping: $${p['Shipping']}`;
-        document.getElementById('modal-details').innerText = `${p['Brand']} - ${p['Size']} - ${p['Color']} - ${p['Condition']}`;
+        document.getElementById('modal-details').innerText = `${p['Brand'] || ''} | ${p['Size'] || ''} | ${p['Color'] || ''} | ${p['Condition'] || ''}`;
         document.getElementById('modal-desc').innerText = p['Description'];
         
         const btn = document.getElementById('buy-btn');
