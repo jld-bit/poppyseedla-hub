@@ -93,6 +93,27 @@
       font-weight: bold;
     }
 
+    .search-section {
+      background: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    #search-input {
+      width: 90%;
+      max-width: 520px;
+      padding: 14px 18px;
+      border: 1px solid #ddd;
+      border-radius: 999px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    #search-input:focus {
+      border-color: #000;
+    }
+
     #product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -149,7 +170,6 @@
       border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
-      border: none;
     }
 
     .view-btn {
@@ -161,6 +181,7 @@
     .quick-cart-btn {
       background: #000;
       color: white;
+      border: none;
     }
 
     .view-btn:hover,
@@ -185,7 +206,7 @@
       background: white;
       padding: 30px;
       border-radius: 12px;
-      max-width: 600px;
+      max-width: 650px;
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
@@ -206,7 +227,7 @@
 
     .gallery-main {
       width: 100%;
-      height: 300px;
+      height: 320px;
       object-fit: contain;
       margin-bottom: 15px;
       background: #f5f5f5;
@@ -218,13 +239,31 @@
     }
 
     #modal-price {
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .item-details {
+      background: #f7f7f7;
+      border-radius: 10px;
+      padding: 15px;
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+
+    .item-description {
+      margin-top: 15px;
+      line-height: 1.6;
     }
 
     .modal-actions {
       display: flex;
       gap: 10px;
-      margin-top: 15px;
+      margin-top: 18px;
+    }
+
+    #modal-buy-button-holder {
+      flex: 2;
     }
 
     .buy-btn {
@@ -234,8 +273,12 @@
       border: none;
       font-weight: bold;
       cursor: pointer;
-      flex: 2;
+      width: 100%;
       border-radius: 8px;
+    }
+
+    .buy-btn:hover {
+      opacity: 0.85;
     }
 
     .offer-btn {
@@ -249,6 +292,10 @@
       color: #000;
       text-decoration: none;
       border-radius: 8px;
+    }
+
+    .offer-btn:hover {
+      background: #f5f5f5;
     }
 
     .empty-message {
@@ -277,6 +324,10 @@
       .card-actions,
       .modal-actions {
         flex-direction: column;
+      }
+
+      #modal-buy-button-holder {
+        flex: 1;
       }
     }
   </style>
@@ -312,6 +363,15 @@
     <button type="button" onclick="renderProducts('Electronics')">Electronics</button>
   </nav>
 
+  <section class="search-section">
+    <input
+      id="search-input"
+      type="text"
+      placeholder="Search items..."
+      oninput="handleSearch()"
+    />
+  </section>
+
   <main id="product-grid"></main>
 
   <div id="item-modal" class="modal" onclick="closeModal(event)">
@@ -322,13 +382,12 @@
 
       <h2 id="modal-title"></h2>
       <p id="modal-price"></p>
-      <p id="modal-details"></p>
-      <p id="modal-desc"></p>
+
+      <div id="modal-details" class="item-details"></div>
+      <div id="modal-desc" class="item-description"></div>
 
       <div class="modal-actions">
-        <button id="buy-btn" class="buy-btn snipcart-add-item" type="button">
-          Add to Cart
-        </button>
+        <div id="modal-buy-button-holder"></div>
 
         <a id="modal-offer-btn" href="#" class="offer-btn">
           Make Offer
@@ -337,6 +396,7 @@
     </div>
   </div>
 
+  <!-- Snipcart hidden container -->
   <div
     hidden
     id="snipcart"
@@ -352,6 +412,7 @@
 
   <script>
     let allProducts = [];
+    let currentCategory = "All";
 
     Papa.parse("inventory.csv", {
       download: true,
@@ -395,23 +456,6 @@
       return number.toFixed(2);
     }
 
-    function cleanShipping(value) {
-      if (!value) return "0.00";
-
-      const cleaned = String(value)
-        .replace("$", "")
-        .replace(",", "")
-        .trim();
-
-      const number = Number(cleaned);
-
-      if (Number.isNaN(number)) {
-        return "0.00";
-      }
-
-      return number.toFixed(2);
-    }
-
     function escapeHtml(text) {
       return String(text)
         .replaceAll("&", "&amp;")
@@ -421,12 +465,24 @@
         .replaceAll("'", "&#039;");
     }
 
+    function getProductField(product, fieldNames) {
+      for (let i = 0; i < fieldNames.length; i++) {
+        const value = product[fieldNames[i]];
+
+        if (value && String(value).trim() !== "") {
+          return String(value).trim();
+        }
+      }
+
+      return "";
+    }
+
     function absoluteImageUrl(imageUrl) {
       return window.location.origin + "/" + imageUrl;
     }
 
-    function productPageUrl(id) {
-      return window.location.origin + window.location.pathname + "?item=" + encodeURIComponent(id);
+    function productPageUrl() {
+      return window.location.origin + window.location.pathname;
     }
 
     function assignCategory(title) {
@@ -459,19 +515,48 @@
       return "Other";
     }
 
+    function handleSearch() {
+      renderProducts(currentCategory);
+    }
+
     function renderProducts(category) {
+      currentCategory = category;
+
       const grid = document.getElementById("product-grid");
+      const searchInput = document.getElementById("search-input");
+      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
       grid.innerHTML = "";
 
-      const filtered =
+      let filtered =
         category === "All"
           ? allProducts
           : allProducts.filter(function(product) {
               return assignCategory(product["Title"]) === category;
             });
 
+      if (searchTerm) {
+        filtered = filtered.filter(function(product) {
+          const searchableText = [
+            product["Item number"],
+            product["Title"],
+            product["Brand"],
+            product["Condition"],
+            product["Color"],
+            product["Material"],
+            product["Feature"],
+            product["Features"],
+            product["Description"]
+          ]
+            .join(" ")
+            .toLowerCase();
+
+          return searchableText.includes(searchTerm);
+        });
+      }
+
       if (filtered.length === 0) {
-        grid.innerHTML = '<p class="empty-message">No products found.</p>';
+        grid.innerHTML = '<p class="empty-message">No items found.</p>';
         return;
       }
 
@@ -479,7 +564,7 @@
         const itemNumber = safeText(product["Item number"]);
         const title = safeText(product["Title"]);
         const price = cleanPrice(product["Start price"]);
-        const description = safeText(product["Description"]);
+        const description = getProductField(product, ["Description", "Item description"]);
         const imageUrl = "images/" + itemNumber + ".jpg";
 
         const card = document.createElement("div");
@@ -505,8 +590,8 @@
               data-item-id="${escapeHtml(itemNumber)}"
               data-item-name="${escapeHtml(title)}"
               data-item-price="${price}"
-              data-item-description="${escapeHtml(description)}"
-              data-item-url="${productPageUrl(itemNumber)}"
+              data-item-description="${escapeHtml(description || title)}"
+              data-item-url="${productPageUrl()}"
               data-item-image="${absoluteImageUrl(imageUrl)}"
             >
               Add
@@ -535,8 +620,13 @@
 
       const title = safeText(product["Title"]);
       const price = cleanPrice(product["Start price"]);
-      const shipping = cleanShipping(product["Shipping"]);
-      const description = safeText(product["Description"]);
+      const shipping = cleanPrice(product["Shipping"]);
+      const description = getProductField(product, ["Description", "Item description"]);
+      const condition = getProductField(product, ["Condition", "Condition description"]);
+      const color = getProductField(product, ["Color", "Colour"]);
+      const material = getProductField(product, ["Material", "Materials"]);
+      const brand = getProductField(product, ["Brand", "Brand name"]);
+      const feature = getProductField(product, ["Feature", "Features"]);
       const imageUrl = "images/" + id + ".jpg";
 
       document.getElementById("main-img").src = imageUrl;
@@ -547,22 +637,35 @@
       document.getElementById("modal-price").innerText =
         "Price: $" + price + " | Shipping: $" + shipping;
 
-      document.getElementById("modal-details").innerText =
-        safeText(product["Brand"]) + " | " +
-        safeText(product["Size"]) + " | " +
-        safeText(product["Color"]) + " | " +
-        safeText(product["Condition"]);
+      document.getElementById("modal-details").innerHTML = `
+        <strong>Condition:</strong> ${escapeHtml(condition || "Not listed")}<br>
+        <strong>Color:</strong> ${escapeHtml(color || "Not listed")}<br>
+        <strong>Material:</strong> ${escapeHtml(material || "Not listed")}<br>
+        <strong>Brand:</strong> ${escapeHtml(brand || "Not listed")}<br>
+        <strong>Feature:</strong> ${escapeHtml(feature || "Not listed")}
+      `;
 
-      document.getElementById("modal-desc").innerText = description;
+      document.getElementById("modal-desc").innerHTML = `
+        <strong>Description:</strong><br>
+        ${escapeHtml(description || "No description listed.")}
+      `;
 
-      const buyBtn = document.getElementById("buy-btn");
+      const modalBuyButtonHolder = document.getElementById("modal-buy-button-holder");
 
-      buyBtn.setAttribute("data-item-id", id);
-      buyBtn.setAttribute("data-item-name", title);
-      buyBtn.setAttribute("data-item-price", price);
-      buyBtn.setAttribute("data-item-description", description);
-      buyBtn.setAttribute("data-item-url", productPageUrl(id));
-      buyBtn.setAttribute("data-item-image", absoluteImageUrl(imageUrl));
+      modalBuyButtonHolder.innerHTML = `
+        <button
+          class="buy-btn snipcart-add-item"
+          type="button"
+          data-item-id="${escapeHtml(id)}"
+          data-item-name="${escapeHtml(title)}"
+          data-item-price="${price}"
+          data-item-description="${escapeHtml(description || title)}"
+          data-item-url="${productPageUrl()}"
+          data-item-image="${absoluteImageUrl(imageUrl)}"
+        >
+          Add to Cart
+        </button>
+      `;
 
       document.getElementById("modal-offer-btn").href =
         "mailto:customercare@poppyseedla.com?subject=" +
