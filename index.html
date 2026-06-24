@@ -1,685 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoppyseedLA | Vintage & Accessories</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    
+    <script>
+      window.SnipcartSettings = { 
+        publicApiKey: 'OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4', 
+        loadStrategy: 'on-user-interaction' 
+      };
+      (()=>{var c,d;(d=(c=window.SnipcartSettings).version)!=null||(c.version="3.0");var s,S;(S=(s=window.SnipcartSettings).timeoutDuration)!=null||(s.timeoutDuration=2750);var l,p;(p=(l=window.SnipcartSettings).domain)!=null||(l.domain="cdn.snipcart.com");var w,u;(u=(w=window.SnipcartSettings).protocol)!=null||(w.protocol="https");var f=window.SnipcartSettings.version.includes("v3.0.0-ci")||window.SnipcartSettings.version!="3.0"&&window.SnipcartSettings.version.localeCompare("3.4.0",void 0,{numeric:!0,sensitivity:"base"})===-1,m=["focus","mouseover","touchmove","scroll","keydown"];window.LoadSnipcart=o;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r();function r(){window.SnipcartSettings.loadStrategy?window.SnipcartSettings.loadStrategy==="on-user-interaction"&&(m.forEach(t=>document.addEventListener(t,o)),setTimeout(o,window.SnipcartSettings.timeoutDuration)):o()}var a=!1;function o(){if(a)return;a=!0;let t=document.getElementsByTagName("head")[0],e=document.querySelector("#snipcart"),i=document.querySelector(`src[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`),n=document.querySelector(`link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`);e||(e=document.createElement("div"),e.id="snipcart",e.setAttribute("hidden","true"),document.body.appendChild(e)),v(e),i||(i=document.createElement("script"),i.src=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`,i.async=!0,t.appendChild(i)),n||(n=document.createElement("link"),n.rel="stylesheet",n.type="text/css",n.href=`${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`,t.prepend(n)),m.forEach(g=>document.removeEventListener(g,o))}function v(t){!f||(t.dataset.apiKey=window.SnipcartSettings.publicApiKey,window.SnipcartSettings.addProductBehavior&&(t.dataset.configAddProductBehavior=window.SnipcartSettings.addProductBehavior),window.SnipcartSettings.modalStyle&&(t.dataset.configModalStyle=window.SnipcartSettings.modalStyle),window.SnipcartSettings.currency&&(t.dataset.currency=window.SnipcartSettings.currency),window.SnipcartSettings.templatesUrl&&(t.dataset.templatesUrl=window.SnipcartSettings.templatesUrl))}})();
+    </script>
 
-  <title>PoppyseedLA | Vintage & Accessories</title>
-
-  <!-- PapaParse: loads inventory.csv -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-
-  <!-- Snipcart CSS -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.css"
-  />
-
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      color: #111;
-    }
-
-    .top-banner {
-      background-color: #fff200;
-      text-align: center;
-      padding: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .ebay-logo {
-      height: 20px;
-    }
-
-    header {
-      text-align: center;
-      padding: 36px 20px 24px;
-      background: white;
-      position: relative;
-    }
-
-    header h1 {
-      margin: 0 0 22px;
-      font-size: 2rem;
-    }
-
-    .header-search {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-
-    #search-input {
-      width: 90%;
-      max-width: 560px;
-      padding: 14px 18px;
-      border: 1px solid #ddd;
-      border-radius: 999px;
-      font-size: 1rem;
-      outline: none;
-      text-align: left;
-    }
-
-    #search-input:focus {
-      border-color: #000;
-    }
-
-    .cart-button {
-      position: absolute;
-      right: 24px;
-      top: 36px;
-      background: #000;
-      color: #fff;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .cart-button:hover {
-      opacity: 0.85;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding: 15px;
-      background: white;
-      border-top: 1px solid #f2f2f2;
-      border-bottom: 1px solid #eee;
-      flex-wrap: wrap;
-    }
-
-    nav button {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      color: #555;
-      padding: 8px 10px;
-    }
-
-    nav button:hover {
-      color: #000;
-      font-weight: bold;
-    }
-
-    #product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 30px;
-      padding: 40px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .product-card {
-      background: white;
-      border: 1px solid #e1e1e1;
-      padding: 20px;
-      border-radius: 12px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .product-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    }
-
-    .product-image {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #eee;
-    }
-
-    .product-title {
-      font-size: 1rem;
-      line-height: 1.2;
-      margin: 14px 0 8px;
-      font-weight: 700;
-    }
-
-    .product-price {
-      font-weight: 700;
-      margin: 0;
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .view-btn,
-    .quick-cart-btn {
-      flex: 1;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .view-btn {
-      background: #fff;
-      color: #000;
-      border: 2px solid #000;
-    }
-
-    .quick-cart-btn {
-      background: #000;
-      color: white;
-      border: none;
-    }
-
-    .view-btn:hover,
-    .quick-cart-btn:hover {
-      opacity: 0.85;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 650px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 28px;
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-weight: bold;
-      color: #555;
-    }
-
-    .gallery-main {
-      width: 100%;
-      height: 320px;
-      object-fit: contain;
-      margin-bottom: 15px;
-      background: #f5f5f5;
-      border-radius: 8px;
-    }
-
-    #modal-title {
-      margin-bottom: 8px;
-    }
-
-    #modal-price {
-      font-weight: 800;
-      font-size: 1.1rem;
-    }
-
-    .item-details {
-      background: #f7f7f7;
-      border-radius: 10px;
-      padding: 15px;
-      line-height: 1.7;
-      margin-top: 12px;
-    }
-
-    .item-description {
-      margin-top: 15px;
-      line-height: 1.6;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .modal-add-btn {
-      background: #000;
-      color: #fff;
-      padding: 15px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      flex: 2;
-      border-radius: 8px;
-    }
-
-    .modal-add-btn:hover {
-      opacity: 0.85;
-    }
-
-    .offer-btn {
-      background: #fff;
-      border: 2px solid #000;
-      padding: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      flex: 1;
-      text-align: center;
-      color: #000;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-
-    .offer-btn:hover {
-      background: #f5f5f5;
-    }
-
-    .empty-message {
-      text-align: center;
-      padding: 50px;
-      color: #777;
-      grid-column: 1 / -1;
-    }
-
-    @media (max-width: 700px) {
-      header {
-        padding-bottom: 30px;
-      }
-
-      .cart-button {
-        position: static;
-        margin-top: 18px;
-      }
-
-      #product-grid {
-        padding: 20px;
-      }
-
-      .card-actions,
-      .modal-actions {
-        flex-direction: column;
-      }
-    }
-  </style>
+    <style>
+        body { font-family: -apple-system, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
+        .top-banner { background-color: #fff200; text-align: center; padding: 10px; font-weight: 600; font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .ebay-logo { height: 20px; }
+        header { text-align: center; padding: 40px; background: white; }
+        nav { display: flex; justify-content: center; gap: 15px; padding: 15px; background: white; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+        nav button { background: none; border: none; font-size: 1rem; cursor: pointer; color: #555; }
+        nav button:hover { color: #000; font-weight: bold; }
+        #product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 30px; padding: 40px; max-width: 1200px; margin: auto; }
+        .product-card { background: white; border: 1px solid #e1e1e1; padding: 20px; border-radius: 12px; }
+        .product-image { width: 100%; height: 240px; object-fit: cover; border-radius: 8px; cursor: pointer; }
+        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; border: none; background: none; font-weight: bold; color: #555; }
+        .gallery-main { width: 100%; height: 300px; object-fit: contain; margin-bottom: 15px; }
+        .buy-btn { background: #000; color: #fff; padding: 15px; border: none; font-weight: bold; cursor: pointer; flex: 2; }
+        .offer-btn { background: #fff; border: 2px solid #000; padding: 15px; font-weight: bold; cursor: pointer; flex: 1; text-align: center; color: #000; text-decoration: none; }
+    </style>
 </head>
-
 <body>
-  <div class="top-banner">
-    <span>Shop our full store on</span>
-    <a href="https://www.ebay.com/str/poppyseedla" target="_blank" rel="noopener">
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg"
-        alt="eBay"
-        class="ebay-logo"
-      />
-    </a>
-  </div>
-
-  <header>
-    <h1>PoppyseedLA</h1>
-
-    <button class="cart-button snipcart-checkout" type="button">
-      Cart 🛒 <span class="snipcart-items-count">0</span>
-    </button>
-
-    <div class="header-search">
-      <input
-        id="search-input"
-        type="text"
-        placeholder="Search items..."
-        oninput="handleSearch()"
-      />
+    <div class="top-banner">
+        <span>Shop our full store on</span>
+        <a href="https://www.ebay.com/str/poppyseedla"><img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg" alt="eBay" class="ebay-logo"></a>
     </div>
-  </header>
+    <header><h1>PoppyseedLA</h1></header>
+    <nav>
+        <button onclick="renderProducts('All')">All</button>
+        <button onclick="renderProducts('Apparel')">Apparel</button>
+        <button onclick="renderProducts('Footwear')">Footwear</button>
+        <button onclick="renderProducts('Accessories')">Accessories</button>
+        <button onclick="renderProducts('Kids')">Kids</button>
+        <button onclick="renderProducts('Home')">Home</button>
+        <button onclick="renderProducts('Electronics')">Electronics</button>
+    </nav>
+    <div id="product-grid"></div>
 
-  <nav>
-    <button type="button" onclick="renderProducts('All')">All</button>
-    <button type="button" onclick="renderProducts('Apparel')">Apparel</button>
-    <button type="button" onclick="renderProducts('Footwear')">Footwear</button>
-    <button type="button" onclick="renderProducts('Accessories')">Accessories</button>
-    <button type="button" onclick="renderProducts('Kids')">Kids</button>
-    <button type="button" onclick="renderProducts('Home')">Home</button>
-    <button type="button" onclick="renderProducts('Electronics')">Electronics</button>
-  </nav>
-
-  <main id="product-grid"></main>
-
-  <div id="item-modal" class="modal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <button class="close-btn" type="button" onclick="closeModalNow()">&times;</button>
-
-      <img id="main-img" class="gallery-main" src="" alt="Product image" />
-
-      <h2 id="modal-title"></h2>
-      <p id="modal-price"></p>
-
-      <div id="modal-details" class="item-details"></div>
-      <div id="modal-desc" class="item-description"></div>
-
-      <div class="modal-actions">
-        <button id="modal-add-btn" class="modal-add-btn" type="button">
-          Add to Cart
-        </button>
-
-        <a id="modal-offer-btn" href="#" class="offer-btn">
-          Make Offer
-        </a>
-      </div>
+    <div id="item-modal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="document.getElementById('item-modal').style.display='none'">&times;</button>
+            <img id="main-img" class="gallery-main" src="">
+            <h2 id="modal-title"></h2>
+            <p id="modal-price"></p>
+            <p id="modal-details"></p>
+            <p id="modal-desc"></p>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="buy-btn" class="buy-btn snipcart-add-item">Add to Cart</button>
+                <a id="modal-offer-btn" href="#" class="offer-btn">Make Offer</a>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div
-    hidden
-    id="snipcart"
-    data-api-key="OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4"
-    data-currency="usd">
-  </div>
-
-  <!-- Snipcart JS -->
-  <script
-    async
-    src="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.js">
-  </script>
-
-  <script>
-    let allProducts = [];
-    let currentCategory = "All";
-    let currentModalItemId = null;
-    const cartButtonMap = new Map();
-
-    Papa.parse("inventory.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-
-      complete: function(results) {
-        allProducts = results.data.filter(function(product) {
-          return product["Item number"] && product["Title"];
-        });
-
-        renderProducts("All");
-      },
-
-      error: function(error) {
-        console.error("CSV loading error:", error);
-
-        document.getElementById("product-grid").innerHTML =
-          '<p class="empty-message">Inventory could not load.</p>';
+    <script>
+      let allProducts = [];
+      Papa.parse("inventory.csv", { download: true, header: true, complete: (results) => { allProducts = results.data.filter(p => p['Item number']); renderProducts('All'); } });
+      function assignCategory(title) {
+          const t = title.toLowerCase();
+          if (t.match(/nike|jordan|shoes|sneakers|cleats|boots|sandals|heels/)) return 'Footwear';
+          if (t.match(/jacket|coat|hoodie|sweater|blazer|shirt|dress|skort|pants|jeans|shorts|scrub/)) return 'Apparel';
+          if (t.match(/hat|cap|bag|wallet|sock|sunglasses|tie|scarf|purse/)) return 'Accessories';
+          if (t.match(/lego|toy|doll|game|figure|plush|kids/)) return 'Kids';
+          if (t.match(/coffee|mug|lantern|home|decor|plant|village/)) return 'Home';
+          if (t.match(/printer|receiver|electronics|adaptor/)) return 'Electronics';
+          return 'Other';
       }
-    });
-
-    function safeText(value) {
-      return value ? String(value) : "";
-    }
-
-    function cleanPrice(value) {
-      if (!value) return "0.00";
-
-      const cleaned = String(value)
-        .replace("$", "")
-        .replace(",", "")
-        .trim();
-
-      const number = Number(cleaned);
-
-      if (Number.isNaN(number)) {
-        return "0.00";
-      }
-
-      return number.toFixed(2);
-    }
-
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function getProductField(product, fieldNames) {
-      for (let i = 0; i < fieldNames.length; i++) {
-        const value = product[fieldNames[i]];
-
-        if (value && String(value).trim() !== "") {
-          return String(value).trim();
-        }
-      }
-
-      return "";
-    }
-
-    function absoluteImageUrl(imageUrl) {
-      return window.location.origin + "/" + imageUrl;
-    }
-
-    function productPageUrl() {
-      return window.location.origin + window.location.pathname;
-    }
-
-    function assignCategory(title) {
-      const t = safeText(title).toLowerCase();
-
-      if (t.match(/nike|jordan|shoes|sneakers|cleats|boots|sandals|heels/)) {
-        return "Footwear";
-      }
-
-      if (t.match(/jacket|coat|hoodie|sweater|blazer|shirt|dress|skort|pants|jeans|shorts|scrub/)) {
-        return "Apparel";
-      }
-
-      if (t.match(/hat|cap|bag|wallet|sock|sunglasses|tie|scarf|purse/)) {
-        return "Accessories";
-      }
-
-      if (t.match(/lego|toy|doll|game|figure|plush|kids/)) {
-        return "Kids";
-      }
-
-      if (t.match(/coffee|mug|lantern|home|decor|plant|village/)) {
-        return "Home";
-      }
-
-      if (t.match(/printer|receiver|electronics|adaptor|adapter|camera|phone|tablet/)) {
-        return "Electronics";
-      }
-
-      return "Other";
-    }
-
-    function handleSearch() {
-      renderProducts(currentCategory);
-    }
-
-    function renderProducts(category) {
-      currentCategory = category;
-
-      const grid = document.getElementById("product-grid");
-      const searchInput = document.getElementById("search-input");
-      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
-
-      grid.innerHTML = "";
-      cartButtonMap.clear();
-
-      let filtered =
-        category === "All"
-          ? allProducts
-          : allProducts.filter(function(product) {
-              return assignCategory(product["Title"]) === category;
-            });
-
-      if (searchTerm) {
-        filtered = filtered.filter(function(product) {
-          const searchableText = [
-            product["Item number"],
-            product["Title"],
-            product["Brand"],
-            product["Condition"],
-            product["Color"],
-            product["Material"],
-            product["Feature"],
-            product["Features"],
-            product["Description"]
-          ]
-            .join(" ")
-            .toLowerCase();
-
-          return searchableText.includes(searchTerm);
+      function renderProducts(category) {
+        const grid = document.getElementById('product-grid');
+        grid.innerHTML = '';
+        const filtered = (category === 'All') ? allProducts : allProducts.filter(p => assignCategory(p['Title']) === category);
+        filtered.forEach(p => {
+          grid.innerHTML += `<div class="product-card">
+            <img src="images/${p['Item number']}.jpg" class="product-image" onclick="openModal('${p['Item number']}')">
+            <h3>${p['Title']}</h3>
+            <p>$${p['Start price']}</p>
+          </div>`;
         });
       }
-
-      if (filtered.length === 0) {
-        grid.innerHTML = '<p class="empty-message">No items found.</p>';
-        return;
+      function openModal(id) {
+        const p = allProducts.find(x => x['Item number'] === id);
+        if(!p) return;
+        document.getElementById('main-img').src = `images/${id}.jpg`;
+        document.getElementById('modal-title').innerText = p['Title'];
+        document.getElementById('modal-price').innerText = `Price: $${p['Start price']} | Shipping: $${p['Shipping']}`;
+        document.getElementById('modal-details').innerText = `${p['Brand'] || ''} | ${p['Size'] || ''} | ${p['Color'] || ''} | ${p['Condition'] || ''}`;
+        document.getElementById('modal-desc').innerText = p['Description'];
+        
+        const btn = document.getElementById('buy-btn');
+        btn.setAttribute('data-item-id', id);
+        btn.setAttribute('data-item-name', p['Title']);
+        btn.setAttribute('data-item-price', p['Start price']);
+        btn.setAttribute('data-item-shipping', p['Shipping']); // Shipping included here
+        btn.setAttribute('data-item-url', window.location.href);
+        btn.setAttribute('data-item-image', `images/${id}.jpg`);
+        
+        document.getElementById('modal-offer-btn').href = `mailto:customercare@poppyseedla.com?subject=Offer for ${p['Title']}`;
+        document.getElementById('item-modal').style.display = 'flex';
       }
-
-      filtered.forEach(function(product) {
-        const itemNumber = safeText(product["Item number"]);
-        const title = safeText(product["Title"]);
-        const price = cleanPrice(product["Start price"]);
-        const description = getProductField(product, ["Description", "Item description"]);
-        const imageUrl = "images/" + itemNumber + ".jpg";
-
-        const card = document.createElement("div");
-        card.className = "product-card";
-
-        card.innerHTML = `
-          <img
-            src="${imageUrl}"
-            class="product-image"
-            alt="${escapeHtml(title)}"
-          >
-
-          <h3 class="product-title">${escapeHtml(title)}</h3>
-
-          <p class="product-price">$${price}</p>
-
-          <div class="card-actions">
-            <button class="view-btn" type="button">View</button>
-
-            <button
-              class="quick-cart-btn snipcart-add-item"
-              type="button"
-              data-item-id="${escapeHtml(itemNumber)}"
-              data-item-name="${escapeHtml(title)}"
-              data-item-price="${price}"
-              data-item-description="${escapeHtml(description || title)}"
-              data-item-url="${productPageUrl()}"
-              data-item-image="${absoluteImageUrl(imageUrl)}"
-            >
-              Add
-            </button>
-          </div>
-        `;
-
-        card.querySelector(".product-image").addEventListener("click", function() {
-          openModal(itemNumber);
-        });
-
-        card.querySelector(".view-btn").addEventListener("click", function() {
-          openModal(itemNumber);
-        });
-
-        grid.appendChild(card);
-
-        const outsideAddButton = card.querySelector(".quick-cart-btn");
-        cartButtonMap.set(String(itemNumber), outsideAddButton);
-      });
-    }
-
-    function openModal(id) {
-      const product = allProducts.find(function(item) {
-        return String(item["Item number"]) === String(id);
-      });
-
-      if (!product) return;
-
-      currentModalItemId = String(id);
-
-      const title = safeText(product["Title"]);
-      const price = cleanPrice(product["Start price"]);
-      const shipping = cleanPrice(product["Shipping"]);
-      const description = getProductField(product, ["Description", "Item description"]);
-      const condition = getProductField(product, ["Condition", "Condition description"]);
-      const color = getProductField(product, ["Color", "Colour"]);
-      const material = getProductField(product, ["Material", "Materials"]);
-      const brand = getProductField(product, ["Brand", "Brand name"]);
-      const feature = getProductField(product, ["Feature", "Features"]);
-      const imageUrl = "images/" + id + ".jpg";
-
-      document.getElementById("main-img").src = imageUrl;
-      document.getElementById("main-img").alt = title;
-
-      document.getElementById("modal-title").innerText = title;
-
-      document.getElementById("modal-price").innerText =
-        "Price: $" + price + " | Shipping: $" + shipping;
-
-      document.getElementById("modal-details").innerHTML = `
-        <strong>Condition:</strong> ${escapeHtml(condition || "Not listed")}<br>
-        <strong>Color:</strong> ${escapeHtml(color || "Not listed")}<br>
-        <strong>Material:</strong> ${escapeHtml(material || "Not listed")}<br>
-        <strong>Brand:</strong> ${escapeHtml(brand || "Not listed")}<br>
-        <strong>Feature:</strong> ${escapeHtml(feature || "Not listed")}
-      `;
-
-      document.getElementById("modal-desc").innerHTML = `
-        <strong>Description:</strong><br>
-        ${escapeHtml(description || "No description listed.")}
-      `;
-
-      document.getElementById("modal-offer-btn").href =
-        "mailto:customercare@poppyseedla.com?subject=" +
-        encodeURIComponent("Offer for " + title);
-
-      document.getElementById("item-modal").style.display = "flex";
-    }
-
-    document.getElementById("modal-add-btn").addEventListener("click", function() {
-      if (!currentModalItemId) return;
-
-      const outsideAddButton = cartButtonMap.get(String(currentModalItemId));
-
-      if (outsideAddButton) {
-        outsideAddButton.click();
-        closeModalNow();
-      } else {
-        alert("Please close this item and click Add from the product card.");
-      }
-    });
-
-    function closeModal(event) {
-      if (event.target.id === "item-modal") {
-        closeModalNow();
-      }
-    }
-
-    function closeModalNow() {
-      document.getElementById("item-modal").style.display = "none";
-    }
-  </script>
+      function closeModal(e) { if(e.target.id === 'item-modal') document.getElementById('item-modal').style.display = 'none'; }
+    </script>
 </body>
 </html>
