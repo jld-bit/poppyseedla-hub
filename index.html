@@ -6,123 +6,14 @@
 
   <title>PoppyseedLA | Vintage & Accessories</title>
 
-  <!-- PapaParse for loading inventory.csv -->
+  <!-- PapaParse: loads inventory.csv -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
-  <!-- Snipcart Settings -->
-  <script>
-    window.SnipcartSettings = {
-      publicApiKey: "OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4",
-      loadStrategy: "on-user-interaction",
-      currency: "usd"
-    };
-
-    (() => {
-      var c, d;
-      (d = (c = window.SnipcartSettings).version) != null || (c.version = "3.0");
-
-      var s, S;
-      (S = (s = window.SnipcartSettings).timeoutDuration) != null || (s.timeoutDuration = 2750);
-
-      var l, p;
-      (p = (l = window.SnipcartSettings).domain) != null || (l.domain = "cdn.snipcart.com");
-
-      var w, u;
-      (u = (w = window.SnipcartSettings).protocol) != null || (w.protocol = "https");
-
-      var f =
-        window.SnipcartSettings.version.includes("v3.0.0-ci") ||
-        window.SnipcartSettings.version != "3.0" &&
-        window.SnipcartSettings.version.localeCompare("3.4.0", void 0, {
-          numeric: true,
-          sensitivity: "base"
-        }) === -1;
-
-      var m = ["focus", "mouseover", "touchmove", "scroll", "keydown"];
-
-      window.LoadSnipcart = o;
-
-      document.readyState === "loading"
-        ? document.addEventListener("DOMContentLoaded", r)
-        : r();
-
-      function r() {
-        window.SnipcartSettings.loadStrategy
-          ? window.SnipcartSettings.loadStrategy === "on-user-interaction" &&
-            (m.forEach(t => document.addEventListener(t, o)),
-            setTimeout(o, window.SnipcartSettings.timeoutDuration))
-          : o();
-      }
-
-      var a = false;
-
-      function o() {
-        if (a) return;
-        a = true;
-
-        let head = document.getElementsByTagName("head")[0];
-        let snipcartDiv = document.querySelector("#snipcart");
-
-        let snipcartScript = document.querySelector(
-          `script[src^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][src$="snipcart.js"]`
-        );
-
-        let snipcartCss = document.querySelector(
-          `link[href^="${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}"][href$="snipcart.css"]`
-        );
-
-        if (!snipcartDiv) {
-          snipcartDiv = document.createElement("div");
-          snipcartDiv.id = "snipcart";
-          snipcartDiv.setAttribute("hidden", "true");
-          document.body.appendChild(snipcartDiv);
-        }
-
-        setSnipcartAttributes(snipcartDiv);
-
-        if (!snipcartScript) {
-          snipcartScript = document.createElement("script");
-          snipcartScript.src =
-            `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.js`;
-          snipcartScript.async = true;
-          head.appendChild(snipcartScript);
-        }
-
-        if (!snipcartCss) {
-          snipcartCss = document.createElement("link");
-          snipcartCss.rel = "stylesheet";
-          snipcartCss.type = "text/css";
-          snipcartCss.href =
-            `${window.SnipcartSettings.protocol}://${window.SnipcartSettings.domain}/themes/v${window.SnipcartSettings.version}/default/snipcart.css`;
-          head.prepend(snipcartCss);
-        }
-
-        m.forEach(eventName => document.removeEventListener(eventName, o));
-      }
-
-      function setSnipcartAttributes(element) {
-        if (!f) return;
-
-        element.dataset.apiKey = window.SnipcartSettings.publicApiKey;
-
-        if (window.SnipcartSettings.currency) {
-          element.dataset.currency = window.SnipcartSettings.currency;
-        }
-
-        if (window.SnipcartSettings.addProductBehavior) {
-          element.dataset.configAddProductBehavior = window.SnipcartSettings.addProductBehavior;
-        }
-
-        if (window.SnipcartSettings.modalStyle) {
-          element.dataset.configModalStyle = window.SnipcartSettings.modalStyle;
-        }
-
-        if (window.SnipcartSettings.templatesUrl) {
-          element.dataset.templatesUrl = window.SnipcartSettings.templatesUrl;
-        }
-      }
-    })();
-  </script>
+  <!-- Snipcart CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.css"
+  />
 
   <style>
     body {
@@ -245,19 +136,35 @@
       margin: 0;
     }
 
-    .view-btn {
-      width: 100%;
+    .card-actions {
+      display: flex;
+      gap: 10px;
       margin-top: 12px;
+    }
+
+    .view-btn,
+    .quick-cart-btn {
+      flex: 1;
       padding: 12px;
-      background: #000;
-      color: white;
-      border: none;
       border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
+      border: none;
     }
 
-    .view-btn:hover {
+    .view-btn {
+      background: #fff;
+      color: #000;
+      border: 2px solid #000;
+    }
+
+    .quick-cart-btn {
+      background: #000;
+      color: white;
+    }
+
+    .view-btn:hover,
+    .quick-cart-btn:hover {
       opacity: 0.85;
     }
 
@@ -331,10 +238,6 @@
       border-radius: 8px;
     }
 
-    .buy-btn:hover {
-      opacity: 0.85;
-    }
-
     .offer-btn {
       background: #fff;
       border: 2px solid #000;
@@ -371,6 +274,7 @@
         padding: 20px;
       }
 
+      .card-actions,
       .modal-actions {
         flex-direction: column;
       }
@@ -393,26 +297,26 @@
   <header>
     <h1>PoppyseedLA</h1>
 
-    <button class="cart-button snipcart-checkout">
+    <button class="cart-button snipcart-checkout" type="button">
       Cart 🛒 <span class="snipcart-items-count">0</span>
     </button>
   </header>
 
   <nav>
-    <button onclick="renderProducts('All')">All</button>
-    <button onclick="renderProducts('Apparel')">Apparel</button>
-    <button onclick="renderProducts('Footwear')">Footwear</button>
-    <button onclick="renderProducts('Accessories')">Accessories</button>
-    <button onclick="renderProducts('Kids')">Kids</button>
-    <button onclick="renderProducts('Home')">Home</button>
-    <button onclick="renderProducts('Electronics')">Electronics</button>
+    <button type="button" onclick="renderProducts('All')">All</button>
+    <button type="button" onclick="renderProducts('Apparel')">Apparel</button>
+    <button type="button" onclick="renderProducts('Footwear')">Footwear</button>
+    <button type="button" onclick="renderProducts('Accessories')">Accessories</button>
+    <button type="button" onclick="renderProducts('Kids')">Kids</button>
+    <button type="button" onclick="renderProducts('Home')">Home</button>
+    <button type="button" onclick="renderProducts('Electronics')">Electronics</button>
   </nav>
 
   <main id="product-grid"></main>
 
   <div id="item-modal" class="modal" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <button class="close-btn" onclick="closeModalNow()">&times;</button>
+      <button class="close-btn" type="button" onclick="closeModalNow()">&times;</button>
 
       <img id="main-img" class="gallery-main" src="" alt="Product image" />
 
@@ -422,7 +326,7 @@
       <p id="modal-desc"></p>
 
       <div class="modal-actions">
-        <button id="buy-btn" class="buy-btn snipcart-add-item">
+        <button id="buy-btn" class="buy-btn snipcart-add-item" type="button">
           Add to Cart
         </button>
 
@@ -432,6 +336,19 @@
       </div>
     </div>
   </div>
+
+  <div
+    hidden
+    id="snipcart"
+    data-api-key="OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4"
+    data-currency="usd">
+  </div>
+
+  <!-- Snipcart JS -->
+  <script
+    async
+    src="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.js">
+  </script>
 
   <script>
     let allProducts = [];
@@ -464,10 +381,52 @@
     function cleanPrice(value) {
       if (!value) return "0.00";
 
-      return String(value)
+      const cleaned = String(value)
         .replace("$", "")
         .replace(",", "")
         .trim();
+
+      const number = Number(cleaned);
+
+      if (Number.isNaN(number)) {
+        return "0.00";
+      }
+
+      return number.toFixed(2);
+    }
+
+    function cleanShipping(value) {
+      if (!value) return "0.00";
+
+      const cleaned = String(value)
+        .replace("$", "")
+        .replace(",", "")
+        .trim();
+
+      const number = Number(cleaned);
+
+      if (Number.isNaN(number)) {
+        return "0.00";
+      }
+
+      return number.toFixed(2);
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function absoluteImageUrl(imageUrl) {
+      return window.location.origin + "/" + imageUrl;
+    }
+
+    function productPageUrl(id) {
+      return window.location.origin + window.location.pathname + "?item=" + encodeURIComponent(id);
     }
 
     function assignCategory(title) {
@@ -520,16 +479,39 @@
         const itemNumber = safeText(product["Item number"]);
         const title = safeText(product["Title"]);
         const price = cleanPrice(product["Start price"]);
-        const imageUrl = `images/${itemNumber}.jpg`;
+        const description = safeText(product["Description"]);
+        const imageUrl = "images/" + itemNumber + ".jpg";
 
         const card = document.createElement("div");
         card.className = "product-card";
 
         card.innerHTML = `
-          <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}">
+          <img
+            src="${imageUrl}"
+            class="product-image"
+            alt="${escapeHtml(title)}"
+          >
+
           <h3 class="product-title">${escapeHtml(title)}</h3>
+
           <p class="product-price">$${price}</p>
-          <button class="view-btn" type="button">View Item</button>
+
+          <div class="card-actions">
+            <button class="view-btn" type="button">View</button>
+
+            <button
+              class="quick-cart-btn snipcart-add-item"
+              type="button"
+              data-item-id="${escapeHtml(itemNumber)}"
+              data-item-name="${escapeHtml(title)}"
+              data-item-price="${price}"
+              data-item-description="${escapeHtml(description)}"
+              data-item-url="${productPageUrl(itemNumber)}"
+              data-item-image="${absoluteImageUrl(imageUrl)}"
+            >
+              Add
+            </button>
+          </div>
         `;
 
         card.querySelector(".product-image").addEventListener("click", function() {
@@ -553,9 +535,9 @@
 
       const title = safeText(product["Title"]);
       const price = cleanPrice(product["Start price"]);
-      const shipping = cleanPrice(product["Shipping"]);
+      const shipping = cleanShipping(product["Shipping"]);
       const description = safeText(product["Description"]);
-      const imageUrl = `images/${id}.jpg`;
+      const imageUrl = "images/" + id + ".jpg";
 
       document.getElementById("main-img").src = imageUrl;
       document.getElementById("main-img").alt = title;
@@ -563,10 +545,13 @@
       document.getElementById("modal-title").innerText = title;
 
       document.getElementById("modal-price").innerText =
-        `Price: $${price} | Shipping: $${shipping}`;
+        "Price: $" + price + " | Shipping: $" + shipping;
 
       document.getElementById("modal-details").innerText =
-        `${safeText(product["Brand"])} | ${safeText(product["Size"])} | ${safeText(product["Color"])} | ${safeText(product["Condition"])}`;
+        safeText(product["Brand"]) + " | " +
+        safeText(product["Size"]) + " | " +
+        safeText(product["Color"]) + " | " +
+        safeText(product["Condition"]);
 
       document.getElementById("modal-desc").innerText = description;
 
@@ -576,25 +561,12 @@
       buyBtn.setAttribute("data-item-name", title);
       buyBtn.setAttribute("data-item-price", price);
       buyBtn.setAttribute("data-item-description", description);
-
-      buyBtn.setAttribute(
-        "data-item-url",
-        window.location.origin + window.location.pathname
-      );
-
-      buyBtn.setAttribute(
-        "data-item-image",
-        window.location.origin + "/" + imageUrl
-      );
-
-      if (shipping && Number(shipping) > 0) {
-        buyBtn.setAttribute("data-item-shippable", "true");
-      } else {
-        buyBtn.removeAttribute("data-item-shippable");
-      }
+      buyBtn.setAttribute("data-item-url", productPageUrl(id));
+      buyBtn.setAttribute("data-item-image", absoluteImageUrl(imageUrl));
 
       document.getElementById("modal-offer-btn").href =
-        `mailto:customercare@poppyseedla.com?subject=${encodeURIComponent("Offer for " + title)}`;
+        "mailto:customercare@poppyseedla.com?subject=" +
+        encodeURIComponent("Offer for " + title);
 
       document.getElementById("item-modal").style.display = "flex";
     }
@@ -607,15 +579,6 @@
 
     function closeModalNow() {
       document.getElementById("item-modal").style.display = "none";
-    }
-
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
     }
   </script>
 </body>
