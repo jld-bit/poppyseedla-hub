@@ -42,20 +42,42 @@
 
     header {
       text-align: center;
-      padding: 40px 20px;
+      padding: 36px 20px 24px;
       background: white;
       position: relative;
     }
 
     header h1 {
-      margin: 0;
+      margin: 0 0 22px;
       font-size: 2rem;
+    }
+
+    .header-search {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    #search-input {
+      width: 90%;
+      max-width: 560px;
+      padding: 14px 18px;
+      border: 1px solid #ddd;
+      border-radius: 999px;
+      font-size: 1rem;
+      outline: none;
+      text-align: left;
+    }
+
+    #search-input:focus {
+      border-color: #000;
     }
 
     .cart-button {
       position: absolute;
       right: 24px;
-      top: 32px;
+      top: 36px;
       background: #000;
       color: #fff;
       border: none;
@@ -75,6 +97,7 @@
       gap: 15px;
       padding: 15px;
       background: white;
+      border-top: 1px solid #f2f2f2;
       border-bottom: 1px solid #eee;
       flex-wrap: wrap;
     }
@@ -91,27 +114,6 @@
     nav button:hover {
       color: #000;
       font-weight: bold;
-    }
-
-    .search-section {
-      background: white;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #eee;
-    }
-
-    #search-input {
-      width: 90%;
-      max-width: 520px;
-      padding: 14px 18px;
-      border: 1px solid #ddd;
-      border-radius: 999px;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    #search-input:focus {
-      border-color: #000;
     }
 
     #product-grid {
@@ -262,22 +264,18 @@
       margin-top: 18px;
     }
 
-    #modal-buy-button-holder {
-      flex: 2;
-    }
-
-    .buy-btn {
+    .modal-add-btn {
       background: #000;
       color: #fff;
       padding: 15px;
       border: none;
       font-weight: bold;
       cursor: pointer;
-      width: 100%;
+      flex: 2;
       border-radius: 8px;
     }
 
-    .buy-btn:hover {
+    .modal-add-btn:hover {
       opacity: 0.85;
     }
 
@@ -307,14 +305,12 @@
 
     @media (max-width: 700px) {
       header {
-        padding-bottom: 85px;
+        padding-bottom: 30px;
       }
 
       .cart-button {
-        left: 50%;
-        right: auto;
-        top: 85px;
-        transform: translateX(-50%);
+        position: static;
+        margin-top: 18px;
       }
 
       #product-grid {
@@ -324,10 +320,6 @@
       .card-actions,
       .modal-actions {
         flex-direction: column;
-      }
-
-      #modal-buy-button-holder {
-        flex: 1;
       }
     }
   </style>
@@ -351,6 +343,15 @@
     <button class="cart-button snipcart-checkout" type="button">
       Cart 🛒 <span class="snipcart-items-count">0</span>
     </button>
+
+    <div class="header-search">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="Search items..."
+        oninput="handleSearch()"
+      />
+    </div>
   </header>
 
   <nav>
@@ -362,15 +363,6 @@
     <button type="button" onclick="renderProducts('Home')">Home</button>
     <button type="button" onclick="renderProducts('Electronics')">Electronics</button>
   </nav>
-
-  <section class="search-section">
-    <input
-      id="search-input"
-      type="text"
-      placeholder="Search items..."
-      oninput="handleSearch()"
-    />
-  </section>
 
   <main id="product-grid"></main>
 
@@ -387,7 +379,9 @@
       <div id="modal-desc" class="item-description"></div>
 
       <div class="modal-actions">
-        <div id="modal-buy-button-holder"></div>
+        <button id="modal-add-btn" class="modal-add-btn" type="button">
+          Add to Cart
+        </button>
 
         <a id="modal-offer-btn" href="#" class="offer-btn">
           Make Offer
@@ -396,7 +390,6 @@
     </div>
   </div>
 
-  <!-- Snipcart hidden container -->
   <div
     hidden
     id="snipcart"
@@ -413,6 +406,8 @@
   <script>
     let allProducts = [];
     let currentCategory = "All";
+    let currentModalItemId = null;
+    const cartButtonMap = new Map();
 
     Papa.parse("inventory.csv", {
       download: true,
@@ -527,6 +522,7 @@
       const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
 
       grid.innerHTML = "";
+      cartButtonMap.clear();
 
       let filtered =
         category === "All"
@@ -608,6 +604,9 @@
         });
 
         grid.appendChild(card);
+
+        const outsideAddButton = card.querySelector(".quick-cart-btn");
+        cartButtonMap.set(String(itemNumber), outsideAddButton);
       });
     }
 
@@ -617,6 +616,8 @@
       });
 
       if (!product) return;
+
+      currentModalItemId = String(id);
 
       const title = safeText(product["Title"]);
       const price = cleanPrice(product["Start price"]);
@@ -650,29 +651,25 @@
         ${escapeHtml(description || "No description listed.")}
       `;
 
-      const modalBuyButtonHolder = document.getElementById("modal-buy-button-holder");
-
-      modalBuyButtonHolder.innerHTML = `
-        <button
-          class="buy-btn snipcart-add-item"
-          type="button"
-          data-item-id="${escapeHtml(id)}"
-          data-item-name="${escapeHtml(title)}"
-          data-item-price="${price}"
-          data-item-description="${escapeHtml(description || title)}"
-          data-item-url="${productPageUrl()}"
-          data-item-image="${absoluteImageUrl(imageUrl)}"
-        >
-          Add to Cart
-        </button>
-      `;
-
       document.getElementById("modal-offer-btn").href =
         "mailto:customercare@poppyseedla.com?subject=" +
         encodeURIComponent("Offer for " + title);
 
       document.getElementById("item-modal").style.display = "flex";
     }
+
+    document.getElementById("modal-add-btn").addEventListener("click", function() {
+      if (!currentModalItemId) return;
+
+      const outsideAddButton = cartButtonMap.get(String(currentModalItemId));
+
+      if (outsideAddButton) {
+        outsideAddButton.click();
+        closeModalNow();
+      } else {
+        alert("Please close this item and click Add from the product card.");
+      }
+    });
 
     function closeModal(event) {
       if (event.target.id === "item-modal") {
