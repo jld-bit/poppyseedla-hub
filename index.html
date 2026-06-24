@@ -6,10 +6,16 @@
 
   <title>PoppyseedLA | Vintage & Accessories</title>
 
-  <!-- PapaParse: loads inventory.csv -->
+  <script>
+    window.SnipcartSettings = {
+      publicApiKey: "OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4",
+      loadStrategy: "manual",
+      currency: "usd"
+    };
+  </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
-  <!-- Snipcart CSS -->
   <link
     rel="stylesheet"
     href="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.css"
@@ -63,10 +69,6 @@
       border-radius: 999px;
       font-weight: 700;
       cursor: pointer;
-    }
-
-    .cart-button:hover {
-      opacity: 0.85;
     }
 
     nav {
@@ -169,10 +171,6 @@
       cursor: pointer;
     }
 
-    .view-btn:hover {
-      opacity: 0.85;
-    }
-
     .modal {
       display: none;
       position: fixed;
@@ -218,10 +216,6 @@
       border-radius: 8px;
     }
 
-    #modal-title {
-      margin-bottom: 8px;
-    }
-
     #modal-price {
       font-weight: 800;
       font-size: 1.1rem;
@@ -257,10 +251,6 @@
       border-radius: 8px;
     }
 
-    .buy-btn:hover {
-      opacity: 0.85;
-    }
-
     .offer-btn {
       background: #fff;
       border: 2px solid #000;
@@ -272,10 +262,6 @@
       color: #000;
       text-decoration: none;
       border-radius: 8px;
-    }
-
-    .offer-btn:hover {
-      background: #f5f5f5;
     }
 
     .empty-message {
@@ -372,14 +358,14 @@
       </div>
     </div>
   </div>
+
   <div
     hidden
     id="snipcart"
-    data-api-key="OWEyMGI2MTQtYWNiMi00MzAyLWJkOGQtOWFmMWRjNGM1NDIwNjM5MTc3ODY0MTM2NjA0NzM4"
+    data-api-key="YOUR_SNIPCART_PUBLIC_KEY_HERE"
     data-currency="usd">
   </div>
 
-  <!-- Snipcart JS -->
   <script
     async
     src="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.js">
@@ -456,8 +442,8 @@
       return window.location.origin + "/" + imageUrl;
     }
 
-    function productPageUrl(id) {
-      return window.location.origin + window.location.pathname + "?item=" + encodeURIComponent(id);
+    function productPageUrl() {
+      return window.location.origin + window.location.pathname;
     }
 
     function assignCategory(title) {
@@ -615,7 +601,7 @@
       buyBtn.setAttribute("data-item-name", title);
       buyBtn.setAttribute("data-item-price", price);
       buyBtn.setAttribute("data-item-description", description || title);
-      buyBtn.setAttribute("data-item-url", productPageUrl(id));
+      buyBtn.setAttribute("data-item-url", productPageUrl());
       buyBtn.setAttribute("data-item-image", absoluteImageUrl(imageUrl));
 
       document.getElementById("modal-offer-btn").href =
