@@ -404,6 +404,19 @@
       return Number.isNaN(number) ? "0.00" : number.toFixed(2);
     }
 
+    function cleanWeight(value) {
+      if (!value) return "700";
+
+      const cleaned = String(value)
+        .replace("g", "")
+        .replace("grams", "")
+        .replace(",", "")
+        .trim();
+
+      const number = Number(cleaned);
+      return Number.isNaN(number) ? "700" : String(Math.round(number));
+    }
+
     function escapeHtml(text) {
       return String(text)
         .replaceAll("&", "&amp;")
@@ -420,6 +433,7 @@
           return String(value).trim();
         }
       }
+
       return "";
     }
 
@@ -428,7 +442,7 @@
     }
 
     function productPageUrl() {
-      return window.location.origin + window.location.pathname;
+      return "https://poppyseedla.com/inventory.json";
     }
 
     function assignCategory(title) {
@@ -492,6 +506,7 @@
         const title = safeText(product["Title"]);
         const price = cleanPrice(product["Start price"]);
         const description = getProductField(product, ["Description", "Item description"]);
+        const weight = cleanWeight(getProductField(product, ["Weight", "Weight grams", "Weight in grams"]));
         const imageUrl = "images/" + itemNumber + ".jpg";
 
         const card = document.createElement("div");
@@ -518,6 +533,7 @@
               data-item-url="${productPageUrl()}"
               data-item-image="${absoluteImageUrl(imageUrl)}"
               data-item-shippable="true"
+              data-item-weight="${weight}"
             >
               Add
             </button>
