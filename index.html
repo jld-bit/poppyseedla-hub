@@ -140,6 +140,12 @@
       margin: 0;
     }
 
+    .shipping-note {
+      font-size: 0.9rem;
+      color: #555;
+      margin: 6px 0 0;
+    }
+
     .card-actions {
       display: flex;
       gap: 10px;
@@ -360,6 +366,8 @@
     let currentModalItemId = null;
     const cartButtonMap = new Map();
 
+    const STANDARD_SHIPPING_TEXT = "Standard shipping calculated at checkout";
+
     Papa.parse("inventory.csv", {
       download: true,
       header: true,
@@ -495,6 +503,7 @@
           <h3 class="product-title">${escapeHtml(title)}</h3>
 
           <p class="product-price">$${price}</p>
+          <p class="shipping-note">${STANDARD_SHIPPING_TEXT}</p>
 
           <div class="card-actions">
             <button class="view-btn" type="button">View</button>
@@ -508,6 +517,7 @@
               data-item-description="${escapeHtml(description || title)}"
               data-item-url="${productPageUrl()}"
               data-item-image="${absoluteImageUrl(imageUrl)}"
+              data-item-shippable="true"
             >
               Add
             </button>
@@ -540,7 +550,6 @@
 
       const title = safeText(product["Title"]);
       const price = cleanPrice(product["Start price"]);
-      const shipping = cleanPrice(product["Shipping"]);
       const description = getProductField(product, ["Description", "Item description"]);
       const condition = getProductField(product, ["Condition", "Condition description"]);
       const color = getProductField(product, ["Color", "Colour"]);
@@ -554,7 +563,7 @@
       document.getElementById("modal-title").innerText = title;
 
       document.getElementById("modal-price").innerText =
-        "Price: $" + price + " | Shipping: $" + shipping;
+        "Price: $" + price + " | " + STANDARD_SHIPPING_TEXT;
 
       document.getElementById("modal-details").innerHTML = `
         <strong>Condition:</strong> ${escapeHtml(condition || "Not listed")}<br>
