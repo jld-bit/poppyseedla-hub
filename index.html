@@ -117,6 +117,11 @@
       border: 1px solid #e1e1e1;
       padding: 20px;
       border-radius: 12px;
+      position: relative;
+    }
+
+    .product-image-wrap {
+      position: relative;
     }
 
     .product-image {
@@ -126,6 +131,24 @@
       border-radius: 8px;
       cursor: pointer;
       background: #eee;
+    }
+
+    .sold-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #c90000;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+
+    .sold-card .product-image {
+      opacity: 0.55;
+      filter: grayscale(80%);
     }
 
     .product-title {
@@ -153,7 +176,8 @@
     }
 
     .view-btn,
-    .quick-cart-btn {
+    .quick-cart-btn,
+    .sold-btn {
       flex: 1;
       padding: 12px;
       border-radius: 8px;
@@ -171,6 +195,13 @@
       background: black;
       color: white;
       border: none;
+    }
+
+    .sold-btn {
+      background: #ddd;
+      color: #777;
+      border: none;
+      cursor: not-allowed;
     }
 
     .modal {
@@ -250,6 +281,12 @@
       cursor: pointer;
       flex: 2;
       border-radius: 8px;
+    }
+
+    .modal-add-btn:disabled {
+      background: #ddd;
+      color: #777;
+      cursor: not-allowed;
     }
 
     .offer-btn {
@@ -392,6 +429,11 @@
       return value ? String(value) : "";
     }
 
+    function isSold(product) {
+      const status = getProductField(product, ["Status", "status", "Availability"]);
+      return status.toLowerCase() === "sold";
+    }
+
     function cleanPrice(value) {
       if (!value) return "0.00";
 
@@ -489,7 +531,8 @@
             product["Material"],
             product["Feature"],
             product["Features"],
-            product["Description"]
+            product["Description"],
+            product["Status"]
           ].join(" ").toLowerCase();
 
           return searchableText.includes(searchTerm);
@@ -507,36 +550,47 @@
         const price = cleanPrice(product["Start price"]);
         const description = getProductField(product, ["Description", "Item description"]);
         const weight = cleanWeight(getProductField(product, ["Weight", "Weight grams", "Weight in grams"]));
+        const sold = isSold(product);
         const imageUrl = "images/" + itemNumber + ".jpg";
 
         const card = document.createElement("div");
-        card.className = "product-card";
+        card.className = sold ? "product-card sold-card" : "product-card";
 
         card.innerHTML = `
-          <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}">
+          <div class="product-image-wrap">
+            <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}">
+            ${sold ? '<div class="sold-badge">SOLD</div>' : ''}
+          </div>
 
           <h3 class="product-title">${escapeHtml(title)}</h3>
 
-          <p class="product-price">$${price}</p>
-          <p class="shipping-note">${STANDARD_SHIPPING_TEXT}</p>
+          <p class="product-price">${sold ? "Sold" : "$" + price}</p>
+          <p class="shipping-note">${sold ? "This item is no longer available" : STANDARD_SHIPPING_TEXT}</p>
 
           <div class="card-actions">
             <button class="view-btn" type="button">View</button>
 
-            <button
-              class="quick-cart-btn snipcart-add-item"
-              type="button"
-              data-item-id="${escapeHtml(itemNumber)}"
-              data-item-name="${escapeHtml(title)}"
-              data-item-price="${price}"
-              data-item-description="${escapeHtml(description || title)}"
-              data-item-url="${productPageUrl()}"
-              data-item-image="${absoluteImageUrl(imageUrl)}"
-              data-item-shippable="true"
-              data-item-weight="${weight}"
-            >
-              Add
-            </button>
+            ${
+              sold
+                ? '<button class="sold-btn" type="button" disabled>Sold</button>'
+                : `
+                  <button
+                    class="quick-cart-btn snipcart-add-item"
+                    type="button"
+                    data-item-id="${escapeHtml(itemNumber)}"
+                    data-item-name="${escapeHtml(title)}"
+                    data-item-price="${price}"
+                    data-item-description="${escapeHtml(description || title)}"
+                    data-item-url="${productPageUrl()}"
+                    data-item-image="${absoluteImageUrl(imageUrl)}"
+                    data-item-shippable="true"
+                    data-item-weight="${weight}"
+                    data-item-max-quantity="1"
+                  >
+                    Add
+                  </button>
+                `
+            }
           </div>
         `;
 
@@ -550,8 +604,10 @@
 
         grid.appendChild(card);
 
-        const outsideAddButton = card.querySelector(".quick-cart-btn");
-        cartButtonMap.set(String(itemNumber), outsideAddButton);
+        if (!sold) {
+          const outsideAddButton = card.querySelector(".quick-cart-btn");
+          cartButtonMap.set(String(itemNumber), outsideAddButton);
+        }
       });
     }
 
@@ -572,6 +628,7 @@
       const material = getProductField(product, ["Material", "Materials"]);
       const brand = getProductField(product, ["Brand", "Brand name"]);
       const feature = getProductField(product, ["Feature", "Features"]);
+      const sold = isSold(product);
       const imageUrl = "images/" + id + ".jpg";
 
       document.getElementById("main-img").src = imageUrl;
@@ -579,9 +636,10 @@
       document.getElementById("modal-title").innerText = title;
 
       document.getElementById("modal-price").innerText =
-        "Price: $" + price + " | " + STANDARD_SHIPPING_TEXT;
+        sold ? "Status: Sold" : "Price: $" + price + " | " + STANDARD_SHIPPING_TEXT;
 
       document.getElementById("modal-details").innerHTML = `
+        <strong>Status:</strong> ${sold ? "Sold" : "Available"}<br>
         <strong>Condition:</strong> ${escapeHtml(condition || "Not listed")}<br>
         <strong>Color:</strong> ${escapeHtml(color || "Not listed")}<br>
         <strong>Material:</strong> ${escapeHtml(material || "Not listed")}<br>
@@ -593,6 +651,16 @@
         <strong>Description:</strong><br>
         ${escapeHtml(description || "No description listed.")}
       `;
+
+      const modalAddBtn = document.getElementById("modal-add-btn");
+
+      if (sold) {
+        modalAddBtn.disabled = true;
+        modalAddBtn.innerText = "Sold";
+      } else {
+        modalAddBtn.disabled = false;
+        modalAddBtn.innerText = "Add to Cart";
+      }
 
       document.getElementById("modal-offer-btn").href =
         "mailto:customercare@poppyseedla.com?subject=" +
@@ -612,7 +680,7 @@
           outsideAddButton.click();
         }, 100);
       } else {
-        alert("Please click Add from the product card.");
+        alert("This item is sold or unavailable.");
       }
     });
 
