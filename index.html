@@ -190,7 +190,7 @@
       const modalOfferBtn = document.getElementById("modal-offer-btn");
       mainImg.src = ""; thumbnailStrip.innerHTML = "";
       if (isSold) { modalSoldBadge.style.display = "block"; modalAddBtn.disabled = true; modalAddBtn.innerText = "Sold Out"; modalOfferBtn.classList.add("disabled-offer"); modalOfferBtn.removeAttribute("href"); }
-      else { modalSoldBadge.style.display = "none"; modalAddBtn.disabled = false; modalAddBtn.innerText = "Add to Cart"; modalOfferBtn.classList.remove("disabled-offer"); modalOfferBtn.href = "mailto:customercare@poppyseedla.com?subject=" + encodeURIComponent("Offer for " + title + " (Item #" + id + ")") + "&body=" + encodeURIComponent("Hi PoppyseedLA,\\n\\nI would like to make an offer of $[Enter Amount Here] for this item.\\n\\nThank you!"); }
+      else { modalSoldBadge.style.display = "none"; modalAddBtn.disabled = false; modalAddBtn.innerText = "Add to Cart"; modalOfferBtn.classList.remove("disabled-offer"); modalOfferBtn.href = "mailto:customercare@poppyseedla.com?subject=" + encodeURIComponent("Offer for " + title + " (Item #" + id + ")") + "&body=" + encodeURIComponent("Hi PoppyseedLA,\n\nI would like to make an offer of $[Enter Amount Here] for this item.\n\nThank you!"); }
       for (let i = 1; i <= 10; i++) {
         const imgUrl = "images/" + id + "_" + i + ".jpg";
         const tempImg = new Image();
@@ -214,7 +214,4 @@
     function closeModalNow() { document.getElementById("item-modal").style.display = "none"; }
   </script>
 </body>
-</html>"""
-
-with open("index.html", "w") as f:
-    f.write(html_template)
+</html>
