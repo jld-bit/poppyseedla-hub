@@ -333,6 +333,14 @@
       border-radius: 8px;
     }
 
+    .offer-btn.disabled-offer {
+      background: #ccc !important;
+      border-color: #ccc !important;
+      color: #666 !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+    }
+
     .empty-message {
       text-align: center;
       padding: 50px;
@@ -659,6 +667,7 @@
       const modalSoldBadge = document.getElementById("modal-sold-badge");
       const thumbnailStrip = document.getElementById("thumbnail-strip");
       const modalAddBtn = document.getElementById("modal-add-btn");
+      const modalOfferBtn = document.getElementById("modal-offer-btn");
       const baseImageUrl = "images/" + id + "_";
       let imageCount = 0;
 
@@ -669,10 +678,16 @@
         modalSoldBadge.style.display = "block";
         modalAddBtn.disabled = true;
         modalAddBtn.innerText = "Sold Out";
+        modalOfferBtn.classList.add("disabled-offer");
+        modalOfferBtn.removeAttribute("href");
       } else {
         modalSoldBadge.style.display = "none";
         modalAddBtn.disabled = false;
         modalAddBtn.innerText = "Add to Cart";
+        modalOfferBtn.classList.remove("disabled-offer");
+        modalOfferBtn.href =
+          "mailto:customercare@poppyseedla.com?subject=" +
+          encodeURIComponent("Offer for " + title);
       }
 
       for (let i = 1; i <= 10; i++) {
@@ -731,10 +746,6 @@
         <strong>Description:</strong><br>
         ${escapeHtml(description || "No description listed.")}
       `;
-
-      document.getElementById("modal-offer-btn").href =
-        "mailto:customercare@poppyseedla.com?subject=" +
-        encodeURIComponent("Offer for " + title);
 
       document.getElementById("item-modal").style.display = "flex";
     }
