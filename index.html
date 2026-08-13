@@ -613,7 +613,7 @@
               data-item-id="${escapeHtml(itemNumber)}"
               data-item-name="${escapeHtml(title)}"
               data-item-price="${price}"
-              data-item-url="https://poppyseedla.com/"
+              data-item-url="${window.location.origin + window.location.pathname}"
               data-item-image="${absoluteImageUrl(imageUrl)}"
               data-item-description="${escapeHtml(description || title)}"
               data-item-shippable="true"
