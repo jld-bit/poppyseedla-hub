@@ -685,9 +685,16 @@
         modalAddBtn.disabled = false;
         modalAddBtn.innerText = "Add to Cart";
         modalOfferBtn.classList.remove("disabled-offer");
+        
+        // Pre-filled email subject and body with amount placeholder
+        const emailSubject = "Offer for " + title + " (Item #" + id + ")";
+        const emailBody = "Hi PoppyseedLA,\n\nI would like to make an offer of $[Enter Amount Here] for this item.\n\nThank you!";
+        
         modalOfferBtn.href =
           "mailto:customercare@poppyseedla.com?subject=" +
-          encodeURIComponent("Offer for " + title);
+          encodeURIComponent(emailSubject) +
+          "&body=" +
+          encodeURIComponent(emailBody);
       }
 
       for (let i = 1; i <= 10; i++) {
