@@ -523,10 +523,6 @@
       return window.location.origin + "/" + imageUrl;
     }
 
-    function productPageUrl() {
-      return "https://poppyseedla.com/products.html";
-    }
-
     function assignCategory(title) {
       const t = safeText(title).toLowerCase();
 
@@ -617,9 +613,9 @@
               data-item-id="${escapeHtml(itemNumber)}"
               data-item-name="${escapeHtml(title)}"
               data-item-price="${price}"
-              data-item-description="${escapeHtml(description || title)}"
-              data-item-url="${productPageUrl()}"
+              data-item-url="https://poppyseedla.com/"
               data-item-image="${absoluteImageUrl(imageUrl)}"
+              data-item-description="${escapeHtml(description || title)}"
               data-item-shippable="true"
               data-item-weight="${weight}"
             >
@@ -686,7 +682,6 @@
         modalAddBtn.innerText = "Add to Cart";
         modalOfferBtn.classList.remove("disabled-offer");
         
-        // Pre-filled email subject and body with amount placeholder
         const emailSubject = "Offer for " + title + " (Item #" + id + ")";
         const emailBody = "Hi PoppyseedLA,\n\nI would like to make an offer of $[Enter Amount Here] for this item.\n\nThank you!";
         
