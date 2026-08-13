@@ -888,10 +888,10 @@
         */
 
         const status =
-          safeText(product["Status"]).toLowerCase();
+          safeText(product["Status"]).trim().toLowerCase();
 
         const isSold =
-          status === "sold";
+          status === "sold" || status === "out of stock";
 
 
         const imageUrl =
@@ -1131,10 +1131,10 @@
 
 
       const status =
-        safeText(product["Status"]).toLowerCase();
+        safeText(product["Status"]).trim().toLowerCase();
 
       const isSold =
-        status === "sold";
+        status === "sold" || status === "out of stock";
 
 
       const mainImg =
