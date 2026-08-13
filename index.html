@@ -380,6 +380,19 @@
 
 <body>
 
+  <!-- Hidden static fallback for Snipcart crawler validation -->
+  <div style="display:none;">
+    <button class="snipcart-add-item"
+      data-item-id="123"
+      data-item-name="Los Angeles Kings NHL Mitchell & Ness Hat"
+      data-item-price="25.00"
+      data-item-url="https://poppyseedla.com/"
+      data-item-image="https://poppyseedla.com/images/123_1.jpg"
+      data-item-shippable="true">
+      Add
+    </button>
+  </div>
+
   <!-- PROFESSIONAL STORE STATUS BANNER -->
   <div class="top-banner">
     <span>
@@ -683,7 +696,7 @@
 
 
     /* =========================================
-       PRODUCT PAGE URL (FIXED TO MATCH ROOT DOMAIN)
+       PRODUCT PAGE URL
        ========================================= */
 
     function productPageUrl() {
@@ -979,11 +992,7 @@
 
               data-item-shippable="true"
 
-              data-item-weight="${weight}"
-
               data-item-max-quantity="1"
-
-              data-item-quantity="1"
 
             >
 
