@@ -6,8 +6,6 @@
 
   <title>PoppyseedLA | Vintage & Accessories</title>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-
   <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.css" />
 
   <style>
@@ -59,50 +57,6 @@
       cursor: pointer;
     }
 
-    .search-wrap {
-      display: flex;
-      justify-content: center;
-    }
-
-    #search-input {
-      width: 90%;
-      max-width: 560px;
-      padding: 14px 18px;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      font-size: 1rem;
-      outline: none;
-    }
-
-    #search-input:focus {
-      border-color: #000;
-    }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      padding: 15px;
-      background: white;
-      border-top: 1px solid #f2f2f2;
-      border-bottom: 1px solid #eee;
-      flex-wrap: wrap;
-    }
-
-    nav button {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      color: #555;
-      padding: 8px 10px;
-    }
-
-    nav button:hover {
-      color: #000;
-      font-weight: bold;
-    }
-
     #product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -117,11 +71,6 @@
       border: 1px solid #e1e1e1;
       padding: 20px;
       border-radius: 12px;
-      position: relative;
-    }
-
-    .product-image-wrap {
-      position: relative;
     }
 
     .product-image {
@@ -129,26 +78,7 @@
       height: 240px;
       object-fit: cover;
       border-radius: 8px;
-      cursor: pointer;
       background: #eee;
-    }
-
-    .sold-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: #c90000;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-    }
-
-    .sold-card .product-image {
-      opacity: 0.55;
-      filter: grayscale(80%);
     }
 
     .product-title {
@@ -175,138 +105,19 @@
       margin-top: 12px;
     }
 
-    .view-btn,
-    .quick-cart-btn,
-    .sold-btn {
-      flex: 1;
+    .quick-cart-btn {
+      width: 100%;
       padding: 12px;
       border-radius: 8px;
       font-weight: 800;
       cursor: pointer;
-    }
-
-    .view-btn {
-      background: white;
-      color: black;
-      border: 2px solid black;
-    }
-
-    .quick-cart-btn {
       background: black;
       color: white;
       border: none;
     }
 
-    .sold-btn {
-      background: #ddd;
-      color: #777;
-      border: none;
-      cursor: not-allowed;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 650px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 28px;
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-weight: bold;
-    }
-
-    .gallery-main {
-      width: 100%;
-      height: 320px;
-      object-fit: contain;
-      background: #f5f5f5;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-
-    #modal-price {
-      font-weight: 800;
-      font-size: 1.1rem;
-    }
-
-    .item-details {
-      background: #f7f7f7;
-      border-radius: 10px;
-      padding: 15px;
-      line-height: 1.7;
-      margin-top: 12px;
-    }
-
-    .item-description {
-      margin-top: 15px;
-      line-height: 1.6;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .modal-add-btn {
-      background: black;
-      color: white;
-      padding: 15px;
-      border: none;
-      font-weight: 800;
-      cursor: pointer;
-      flex: 2;
-      border-radius: 8px;
-    }
-
-    .modal-add-btn:disabled {
-      background: #ddd;
-      color: #777;
-      cursor: not-allowed;
-    }
-
-    .offer-btn {
-      background: white;
-      border: 2px solid black;
-      padding: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      flex: 1;
-      text-align: center;
-      color: black;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-
-    .empty-message {
-      text-align: center;
-      padding: 50px;
-      color: #777;
-      grid-column: 1 / -1;
+    .quick-cart-btn:hover {
+      opacity: 0.85;
     }
 
     @media (max-width: 700px) {
@@ -314,12 +125,6 @@
         position: static;
         margin-bottom: 18px;
       }
-
-      .card-actions,
-      .modal-actions {
-        flex-direction: column;
-      }
-
       #product-grid {
         padding: 20px;
       }
@@ -329,72 +134,43 @@
 
 <body>
   <div class="top-banner">
-  <span>
-    We’re currently updating our online shop. For our complete inventory, please visit our eBay store.
-    Thank you for your support and patience.
-  </span>
-
-  <a href="https://www.ebay.com/str/poppyseedla" target="_blank" rel="noopener">
-    <img
-      src="https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg"
-      alt="eBay"
-      class="ebay-logo"
-    />
-  </a>
-</div>
+    <span>Shop our full store on</span>
+    <a href="https://www.ebay.com/str/poppyseedla" target="_blank" rel="noopener">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg" alt="eBay" class="ebay-logo" />
+    </a>
+  </div>
 
   <header>
     <button class="cart-button snipcart-checkout" type="button">
       Cart 🛒 <span class="snipcart-items-count">0</span>
     </button>
-
     <h1>PoppyseedLA</h1>
-
-    <div class="search-wrap">
-      <input
-        id="search-input"
-        type="text"
-        placeholder="Search items..."
-        oninput="handleSearch()"
-      />
-    </div>
   </header>
 
-  <nav>
-    <button type="button" onclick="renderProducts('All')">All</button>
-    <button type="button" onclick="renderProducts('Apparel')">Apparel</button>
-    <button type="button" onclick="renderProducts('Footwear')">Footwear</button>
-    <button type="button" onclick="renderProducts('Accessories')">Accessories</button>
-    <button type="button" onclick="renderProducts('Kids')">Kids</button>
-    <button type="button" onclick="renderProducts('Home')">Home</button>
-    <button type="button" onclick="renderProducts('Electronics')">Electronics</button>
-  </nav>
-
-  <main id="product-grid"></main>
-
-  <div id="item-modal" class="modal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <button class="close-btn" type="button" onclick="closeModalNow()">&times;</button>
-
-      <img id="main-img" class="gallery-main" src="" alt="Product image" />
-
-      <h2 id="modal-title"></h2>
-      <p id="modal-price"></p>
-
-      <div id="modal-details" class="item-details"></div>
-      <div id="modal-desc" class="item-description"></div>
-
-      <div class="modal-actions">
-        <button id="modal-add-btn" class="modal-add-btn" type="button">
+  <main id="product-grid">
+    <!-- Example product card mapped directly to a Snipcart product ID -->
+    <div class="product-card">
+      <img src="images/266821921738.jpg" class="product-image" alt="Kenneth Cole Women Blue Bomber Jacket">
+      <h3 class="product-title">Kenneth Cole Women Blue Bomber Jacket Full Zip Cut Out Small</h3>
+      <p class="product-price">$20.00</p>
+      <p class="shipping-note">Standard shipping calculated at checkout</p>
+      <div class="card-actions">
+        <button
+          class="quick-cart-btn snipcart-add-item"
+          type="button"
+          data-item-id="266821921738"
+          data-item-name="Kenneth Cole Women Blue Bomber Jacket Full Zip Cut Out Small"
+          data-item-price="20.00"
+          data-item-url="https://poppyseedla.com"
+          data-item-image="https://poppyseedla.com/images/266821921738.jpg"
+          data-item-shippable="true"
+          data-item-weight="700"
+        >
           Add to Cart
         </button>
-
-        <a id="modal-offer-btn" href="#" class="offer-btn">
-          Make Offer
-        </a>
       </div>
     </div>
-  </div>
+  </main>
 
   <div
     hidden
@@ -404,303 +180,5 @@
   </div>
 
   <script async src="https://cdn.snipcart.com/themes/v3.6.0/default/snipcart.js"></script>
-
-  <script>
-    let allProducts = [];
-    let currentCategory = "All";
-    let currentModalItemId = null;
-    const cartButtonMap = new Map();
-
-    const STANDARD_SHIPPING_TEXT = "Standard shipping calculated at checkout";
-
-    Papa.parse("inventory.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-
-      complete: function(results) {
-        allProducts = results.data.filter(function(product) {
-          return product["Item number"] && product["Title"];
-        });
-
-        renderProducts("All");
-      },
-
-      error: function(error) {
-        console.error("CSV loading error:", error);
-        document.getElementById("product-grid").innerHTML =
-          '<p class="empty-message">Inventory could not load.</p>';
-      }
-    });
-
-    function safeText(value) {
-      return value ? String(value) : "";
-    }
-
-    function isSold(product) {
-      const status = getProductField(product, ["Status", "status", "Availability"]);
-      return status.toLowerCase() === "sold";
-    }
-
-    function cleanPrice(value) {
-      if (!value) return "0.00";
-
-      const cleaned = String(value)
-        .replace("$", "")
-        .replace(",", "")
-        .trim();
-
-      const number = Number(cleaned);
-      return Number.isNaN(number) ? "0.00" : number.toFixed(2);
-    }
-
-    function cleanWeight(value) {
-      if (!value) return "700";
-
-      const cleaned = String(value)
-        .replace("g", "")
-        .replace("grams", "")
-        .replace(",", "")
-        .trim();
-
-      const number = Number(cleaned);
-      return Number.isNaN(number) ? "700" : String(Math.round(number));
-    }
-
-    function escapeHtml(text) {
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function getProductField(product, fieldNames) {
-      for (let i = 0; i < fieldNames.length; i++) {
-        const value = product[fieldNames[i]];
-        if (value && String(value).trim() !== "") {
-          return String(value).trim();
-        }
-      }
-
-      return "";
-    }
-
-    function absoluteImageUrl(imageUrl) {
-      return window.location.origin + "/" + imageUrl;
-    }
-
-    function productPageUrl() {
-      return "https://poppyseedla.com/products.html";
-    }
-
-    function assignCategory(title) {
-      const t = safeText(title).toLowerCase();
-
-      if (t.match(/nike|jordan|shoes|sneakers|cleats|boots|sandals|heels/)) return "Footwear";
-      if (t.match(/jacket|coat|hoodie|sweater|blazer|shirt|dress|skort|pants|jeans|shorts|scrub/)) return "Apparel";
-      if (t.match(/hat|cap|bag|wallet|sock|sunglasses|tie|scarf|purse/)) return "Accessories";
-      if (t.match(/lego|toy|doll|game|figure|plush|kids/)) return "Kids";
-      if (t.match(/coffee|mug|lantern|home|decor|plant|village/)) return "Home";
-      if (t.match(/printer|receiver|electronics|adaptor|adapter|camera|phone|tablet/)) return "Electronics";
-
-      return "Other";
-    }
-
-    function handleSearch() {
-      renderProducts(currentCategory);
-    }
-
-    function renderProducts(category) {
-      currentCategory = category;
-
-      const grid = document.getElementById("product-grid");
-      const searchInput = document.getElementById("search-input");
-      const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : "";
-
-      grid.innerHTML = "";
-      cartButtonMap.clear();
-
-      let filtered = category === "All"
-        ? allProducts
-        : allProducts.filter(function(product) {
-            return assignCategory(product["Title"]) === category;
-          });
-
-      if (searchTerm) {
-        filtered = filtered.filter(function(product) {
-          const searchableText = [
-            product["Item number"],
-            product["Title"],
-            product["Brand"],
-            product["Condition"],
-            product["Color"],
-            product["Material"],
-            product["Feature"],
-            product["Features"],
-            product["Description"],
-            product["Status"]
-          ].join(" ").toLowerCase();
-
-          return searchableText.includes(searchTerm);
-        });
-      }
-
-      if (filtered.length === 0) {
-        grid.innerHTML = '<p class="empty-message">No items found.</p>';
-        return;
-      }
-
-      filtered.forEach(function(product) {
-        const itemNumber = safeText(product["Item number"]);
-        const title = safeText(product["Title"]);
-        const price = cleanPrice(product["Start price"]);
-        const description = getProductField(product, ["Description", "Item description"]);
-        const weight = cleanWeight(getProductField(product, ["Weight", "Weight grams", "Weight in grams"]));
-        const sold = isSold(product);
-        const imageUrl = "images/" + itemNumber + ".jpg";
-
-        const card = document.createElement("div");
-        card.className = sold ? "product-card sold-card" : "product-card";
-
-        card.innerHTML = `
-          <div class="product-image-wrap">
-            <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}">
-            ${sold ? '<div class="sold-badge">SOLD</div>' : ''}
-          </div>
-
-          <h3 class="product-title">${escapeHtml(title)}</h3>
-
-          <p class="product-price">${sold ? "Sold" : "$" + price}</p>
-          <p class="shipping-note">${sold ? "This item is no longer available" : STANDARD_SHIPPING_TEXT}</p>
-
-          <div class="card-actions">
-            <button class="view-btn" type="button">View</button>
-
-            ${
-              sold
-                ? '<button class="sold-btn" type="button" disabled>Sold</button>'
-                : `
-                  <button
-                    class="quick-cart-btn snipcart-add-item"
-                    type="button"
-                    data-item-id="${escapeHtml(itemNumber)}"
-                    data-item-name="${escapeHtml(title)}"
-                    data-item-price="${price}"
-                    data-item-description="${escapeHtml(description || title)}"
-                    data-item-url="${productPageUrl()}"
-                    data-item-image="${absoluteImageUrl(imageUrl)}"
-                    data-item-shippable="true"
-                    data-item-weight="${weight}"
-                    data-item-max-quantity="1"
-                  >
-                    Add
-                  </button>
-                `
-            }
-          </div>
-        `;
-
-        card.querySelector(".product-image").addEventListener("click", function() {
-          openModal(itemNumber);
-        });
-
-        card.querySelector(".view-btn").addEventListener("click", function() {
-          openModal(itemNumber);
-        });
-
-        grid.appendChild(card);
-
-        if (!sold) {
-          const outsideAddButton = card.querySelector(".quick-cart-btn");
-          cartButtonMap.set(String(itemNumber), outsideAddButton);
-        }
-      });
-    }
-
-    function openModal(id) {
-      const product = allProducts.find(function(item) {
-        return String(item["Item number"]) === String(id);
-      });
-
-      if (!product) return;
-
-      currentModalItemId = String(id);
-
-      const title = safeText(product["Title"]);
-      const price = cleanPrice(product["Start price"]);
-      const description = getProductField(product, ["Description", "Item description"]);
-      const condition = getProductField(product, ["Condition", "Condition description"]);
-      const color = getProductField(product, ["Color", "Colour"]);
-      const material = getProductField(product, ["Material", "Materials"]);
-      const brand = getProductField(product, ["Brand", "Brand name"]);
-      const feature = getProductField(product, ["Feature", "Features"]);
-      const sold = isSold(product);
-      const imageUrl = "images/" + id + ".jpg";
-
-      document.getElementById("main-img").src = imageUrl;
-      document.getElementById("main-img").alt = title;
-      document.getElementById("modal-title").innerText = title;
-
-      document.getElementById("modal-price").innerText =
-        sold ? "Status: Sold" : "Price: $" + price + " | " + STANDARD_SHIPPING_TEXT;
-
-      document.getElementById("modal-details").innerHTML = `
-        <strong>Status:</strong> ${sold ? "Sold" : "Available"}<br>
-        <strong>Condition:</strong> ${escapeHtml(condition || "Not listed")}<br>
-        <strong>Color:</strong> ${escapeHtml(color || "Not listed")}<br>
-        <strong>Material:</strong> ${escapeHtml(material || "Not listed")}<br>
-        <strong>Brand:</strong> ${escapeHtml(brand || "Not listed")}<br>
-        <strong>Feature:</strong> ${escapeHtml(feature || "Not listed")}
-      `;
-
-      document.getElementById("modal-desc").innerHTML = `
-        <strong>Description:</strong><br>
-        ${escapeHtml(description || "No description listed.")}
-      `;
-
-      const modalAddBtn = document.getElementById("modal-add-btn");
-
-      if (sold) {
-        modalAddBtn.disabled = true;
-        modalAddBtn.innerText = "Sold";
-      } else {
-        modalAddBtn.disabled = false;
-        modalAddBtn.innerText = "Add to Cart";
-      }
-
-      document.getElementById("modal-offer-btn").href =
-        "mailto:customercare@poppyseedla.com?subject=" +
-        encodeURIComponent("Offer for " + title);
-
-      document.getElementById("item-modal").style.display = "flex";
-    }
-
-    document.getElementById("modal-add-btn").addEventListener("click", function() {
-      if (!currentModalItemId) return;
-
-      const outsideAddButton = cartButtonMap.get(String(currentModalItemId));
-
-      if (outsideAddButton) {
-        closeModalNow();
-        setTimeout(function() {
-          outsideAddButton.click();
-        }, 100);
-      } else {
-        alert("This item is sold or unavailable.");
-      }
-    });
-
-    function closeModal(event) {
-      if (event.target.id === "item-modal") {
-        closeModalNow();
-      }
-    }
-
-    function closeModalNow() {
-      document.getElementById("item-modal").style.display = "none";
-    }
-  </script>
 </body>
 </html>
