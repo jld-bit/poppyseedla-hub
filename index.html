@@ -117,15 +117,40 @@
       border: 1px solid #e1e1e1;
       padding: 20px;
       border-radius: 12px;
+      position: relative;
+    }
+
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      background: #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
     }
 
     .product-image {
       width: 100%;
-      height: 240px;
+      height: 100%;
       object-fit: cover;
+    }
+
+    .sold-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      background: rgba(220, 20, 60, 0.9);
+      color: white;
+      font-size: 2rem;
+      font-weight: 900;
+      padding: 8px 24px;
       border-radius: 8px;
-      cursor: pointer;
-      background: #eee;
+      letter-spacing: 2px;
+      border: 3px solid white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      pointer-events: none;
     }
 
     .product-title {
@@ -173,6 +198,14 @@
       border: none;
     }
 
+    .quick-cart-btn:disabled,
+    .modal-add-btn:disabled {
+      background: #ccc !important;
+      color: #666 !important;
+      cursor: not-allowed !important;
+      border: none !important;
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -214,14 +247,22 @@
       flex-direction: column;
       gap: 10px;
       margin-bottom: 15px;
+      position: relative;
+    }
+
+    .gallery-main-wrap {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      background: #f5f5f5;
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     .gallery-main {
       width: 100%;
-      height: 350px;
+      height: 100%;
       object-fit: contain;
-      background: #f5f5f5;
-      border-radius: 8px;
     }
 
     .gallery-thumbnails {
@@ -359,7 +400,10 @@
       <button class="close-btn" type="button" onclick="closeModalNow()">&times;</button>
 
       <div class="gallery-container">
-        <img id="main-img" class="gallery-main" src="" alt="Product image" />
+        <div class="gallery-main-wrap">
+          <img id="main-img" class="gallery-main" src="" alt="Product image" />
+          <div id="modal-sold-badge" class="sold-badge" style="display: none;">SOLD</div>
+        </div>
         <div id="thumbnail-strip" class="gallery-thumbnails"></div>
       </div>
 
@@ -537,13 +581,18 @@
         const price = cleanPrice(product["Start price"]);
         const description = getProductField(product, ["Description", "Item description"]);
         const weight = cleanWeight(getProductField(product, ["Weight", "Weight grams", "Weight in grams"]));
+        const status = safeText(product["Status"]).toLowerCase();
+        const isSold = status === "sold";
         const imageUrl = "images/" + itemNumber + "_1.jpg";
 
         const card = document.createElement("div");
         card.className = "product-card";
 
         card.innerHTML = `
-          <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}" onerror="this.src='images/${escapeHtml(itemNumber)}.jpg';">
+          <div class="image-wrapper">
+            <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}" onerror="this.src='images/${escapeHtml(itemNumber)}.jpg';">
+            ${isSold ? '<div class="sold-badge">SOLD</div>' : ''}
+          </div>
 
           <h3 class="product-title">${escapeHtml(title)}</h3>
 
@@ -554,8 +603,9 @@
             <button class="view-btn" type="button">View</button>
 
             <button
-              class="quick-cart-btn snipcart-add-item"
+              class="quick-cart-btn ${isSold ? '' : 'snipcart-add-item'}"
               type="button"
+              ${isSold ? 'disabled' : ''}
               data-item-id="${escapeHtml(itemNumber)}"
               data-item-name="${escapeHtml(title)}"
               data-item-price="${price}"
@@ -565,12 +615,12 @@
               data-item-shippable="true"
               data-item-weight="${weight}"
             >
-              Add
+              ${isSold ? 'Sold Out' : 'Add'}
             </button>
           </div>
         `;
 
-        card.querySelector(".product-image").addEventListener("click", function() {
+        card.querySelector(".image-wrapper").addEventListener("click", function() {
           openModal(itemNumber);
         });
 
@@ -602,14 +652,28 @@
       const material = getProductField(product, ["Material", "Materials"]);
       const brand = getProductField(product, ["Brand", "Brand name"]);
       const feature = getProductField(product, ["Feature", "Features"]);
+      const status = safeText(product["Status"]).toLowerCase();
+      const isSold = status === "sold";
 
       const mainImg = document.getElementById("main-img");
+      const modalSoldBadge = document.getElementById("modal-sold-badge");
       const thumbnailStrip = document.getElementById("thumbnail-strip");
+      const modalAddBtn = document.getElementById("modal-add-btn");
       const baseImageUrl = "images/" + id + "_";
       let imageCount = 0;
 
       mainImg.src = "";
       thumbnailStrip.innerHTML = "";
+
+      if (isSold) {
+        modalSoldBadge.style.display = "block";
+        modalAddBtn.disabled = true;
+        modalAddBtn.innerText = "Sold Out";
+      } else {
+        modalSoldBadge.style.display = "none";
+        modalAddBtn.disabled = false;
+        modalAddBtn.innerText = "Add to Cart";
+      }
 
       for (let i = 1; i <= 10; i++) {
         const imgUrl = baseImageUrl + i + ".jpg";
@@ -676,17 +740,18 @@
     }
 
     document.getElementById("modal-add-btn").addEventListener("click", function() {
+      if (this.disabled) return;
       if (!currentModalItemId) return;
 
       const outsideAddButton = cartButtonMap.get(String(currentModalItemId));
 
-      if (outsideAddButton) {
+      if (outsideAddButton && !outsideAddButton.disabled) {
         closeModalNow();
         setTimeout(function() {
           outsideAddButton.click();
         }, 100);
       } else {
-        alert("Please click Add from the product card.");
+        alert("This item is sold out.");
       }
     });
 
