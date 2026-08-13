@@ -1,5 +1,3 @@
-Working Index html
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -210,13 +208,40 @@ Working Index html
       font-weight: bold;
     }
 
+    /* --- Gallery Styles --- */
+    .gallery-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
     .gallery-main {
       width: 100%;
-      height: 320px;
+      height: 350px;
       object-fit: contain;
       background: #f5f5f5;
       border-radius: 8px;
-      margin-bottom: 15px;
+    }
+
+    .gallery-thumbnails {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .thumbnail {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .thumbnail.active {
+      border-color: #000;
     }
 
     #modal-price {
@@ -333,7 +358,10 @@ Working Index html
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="close-btn" type="button" onclick="closeModalNow()">&times;</button>
 
-      <img id="main-img" class="gallery-main" src="" alt="Product image" />
+      <div class="gallery-container">
+        <img id="main-img" class="gallery-main" src="" alt="Product image" />
+        <div id="thumbnail-strip" class="gallery-thumbnails"></div>
+      </div>
 
       <h2 id="modal-title"></h2>
       <p id="modal-price"></p>
@@ -509,13 +537,13 @@ Working Index html
         const price = cleanPrice(product["Start price"]);
         const description = getProductField(product, ["Description", "Item description"]);
         const weight = cleanWeight(getProductField(product, ["Weight", "Weight grams", "Weight in grams"]));
-        const imageUrl = "images/" + itemNumber + ".jpg";
+        const imageUrl = "images/" + itemNumber + "_1.jpg";
 
         const card = document.createElement("div");
         card.className = "product-card";
 
         card.innerHTML = `
-          <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}">
+          <img src="${imageUrl}" class="product-image" alt="${escapeHtml(title)}" onerror="this.src='images/${escapeHtml(itemNumber)}.jpg';">
 
           <h3 class="product-title">${escapeHtml(title)}</h3>
 
@@ -574,12 +602,56 @@ Working Index html
       const material = getProductField(product, ["Material", "Materials"]);
       const brand = getProductField(product, ["Brand", "Brand name"]);
       const feature = getProductField(product, ["Feature", "Features"]);
-      const imageUrl = "images/" + id + ".jpg";
 
-      document.getElementById("main-img").src = imageUrl;
-      document.getElementById("main-img").alt = title;
+      const mainImg = document.getElementById("main-img");
+      const thumbnailStrip = document.getElementById("thumbnail-strip");
+      const baseImageUrl = "images/" + id + "_";
+      let imageCount = 0;
+
+      mainImg.src = "";
+      thumbnailStrip.innerHTML = "";
+
+      for (let i = 1; i <= 10; i++) {
+        const imgUrl = baseImageUrl + i + ".jpg";
+        
+        const tempImg = new Image();
+        tempImg.onload = function() {
+          createThumbnail(imgUrl, i === 1);
+          imageCount++;
+          
+          if (imageCount === 1) {
+            mainImg.src = imgUrl;
+            mainImg.alt = title;
+          }
+        };
+        tempImg.onerror = function() {
+           if (i === 1 && imageCount === 0) {
+                const fallbackUrl = "images/" + id + ".jpg";
+                mainImg.src = fallbackUrl;
+                mainImg.alt = title;
+                createThumbnail(fallbackUrl, true);
+           }
+           return false;
+        };
+        
+        tempImg.src = imgUrl;
+      }
+
+      function createThumbnail(url, isActive) {
+        const thumb = document.createElement("img");
+        thumb.src = url;
+        thumb.className = "thumbnail" + (isActive ? " active" : "");
+        thumb.alt = "Thumbnail";
+        thumb.onclick = function() {
+            mainImg.src = url;
+            const allThumbs = thumbnailStrip.querySelectorAll(".thumbnail");
+            allThumbs.forEach(t => t.classList.remove("active"));
+            thumb.classList.add("active");
+        };
+        thumbnailStrip.appendChild(thumb);
+      }
+
       document.getElementById("modal-title").innerText = title;
-
       document.getElementById("modal-price").innerText =
         "Price: $" + price + " | " + STANDARD_SHIPPING_TEXT;
 
