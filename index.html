@@ -290,14 +290,16 @@
       padding-bottom: 5px;
     }
 
-    .thumbnail {
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 4px;
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
+    .gallery-thumbnails img, .thumbnail {
+    width: 70px !important;
+    height: 70px !important;
+    min-width: 70px !important;
+    object-fit: cover !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    border: 2px solid transparent !important;
+    margin: 0 !important;
+}
 
     .thumbnail.active {
       border-color: #000;
