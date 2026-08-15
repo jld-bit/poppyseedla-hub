@@ -1340,83 +1340,19 @@ if (images.length > 0) {
        CREATE IMAGE THUMBNAIL
        ========================================= */
 
-    function createThumbnail(
-      url,
-      isActive
-    ) {
-
-      const thumb =
-        document.createElement("img");
-
-
-      thumb.src =
-        url;
-
-
-      thumb.className =
-        "thumbnail" +
-        (
-          isActive
-            ? " active"
-            : ""
-        );
-
-
-      thumb.alt =
-        "Thumbnail";
-
-
-      thumb.onclick =
-        function() {
-
-          const mainImg =
-            document.getElementById(
-              "main-img"
-            );
-
-
-          const thumbnailStrip =
-            document.getElementById(
-              "thumbnail-strip"
-            );
-
-
-          mainImg.src =
-            url;
-
-
-          const allThumbs =
-            thumbnailStrip.querySelectorAll(
-              ".thumbnail"
-            );
-
-
-          allThumbs.forEach(
-            function(t) {
-
-              t.classList.remove(
-                "active"
-              );
-
-            }
-          );
-
-
-          thumb.classList.add(
-            "active"
-          );
-
-        };
-
-
-      document
-        .getElementById(
-          "thumbnail-strip"
-        )
-        .appendChild(thumb);
-
-    }
-
+   function createThumbnail(url, isActive) {
+    const thumb = document.createElement("img");
+    thumb.src = url;
+    thumb.className = "thumbnail" + (isActive ? " active" : "");
+    thumb.alt = "Thumbnail";
+    thumb.onclick = function() {
+        const mainImg = document.getElementById("main-img");
+        mainImg.src = url;
+        document.querySelectorAll(".thumbnail").forEach(t => t.classList.remove("active"));
+        thumb.classList.add("active");
+    };
+    return thumb;
+}
 
     /* =========================================
        MODAL ADD TO CART
