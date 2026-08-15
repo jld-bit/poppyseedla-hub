@@ -1168,7 +1168,7 @@
         "images/" + id + "_";
 
  const imageStr = product.Image2 || product.image || "";
-const images = [...new Set(imageStr.split(',').map(img => img.trim()).filter(Boolean))];     
+    const images = Array.from(new Set(imageStr.split(',').map(img => img.trim()).filter(Boolean)));     
       
 if (images.length > 0) {
     mainImg.src = images[0];
