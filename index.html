@@ -1167,11 +1167,11 @@
       const baseImageUrl =
         "images/" + id + "_";
 
-
-      let imageCount = 0;
-
-const imageStr = product["Image2"] || product.image || "";
-const images = [...new Set(imageStr.split(',').map(img => img.trim()).filter(Boolean))];
+      const imageCount = parseInt(product.imageCount) || 5;
+    const images = [];
+    for (let i = 1; i <= imageCount; i++) {
+        images.push(id + "_" + i + ".jpg");
+    }
       
 if (images.length > 0) {
     mainImg.src = images[0];
