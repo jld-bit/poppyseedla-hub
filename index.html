@@ -1149,36 +1149,27 @@
         );
 
     const thumbnailStrip = document.getElementById("thumbnail-strip");
-thumbnailStrip.innerHTML = "";
-let isFirst = true;
-
+let images = [];
 for (let i = 1; i <= 8; i++) {
-    const imgSrc = "images/" + id + "_" + i + ".jpg";
-    const thumb = document.createElement("img");
-    thumb.src = imgSrc;
-    thumb.className = "modal-thumb";
-    
-    thumb.onload = () => {
-        if (isFirst) {
+    images.push("images/" + id + "_" + i + ".jpg");
+}
+
+if (images.length > 0) {
+    mainImg.src = images[0];
+    thumbnailStrip.innerHTML = "";
+    images.forEach((imgSrc, index) => {
+        const thumb = document.createElement("img");
+        thumb.src = imgSrc;
+        thumb.className = "modal-thumb" + (index === 0 ? " active" : "");
+        thumb.onclick = () => {
             mainImg.src = imgSrc;
+            document.querySelectorAll(".modal-thumb").forEach(t => t.classList.remove("active"));
             thumb.classList.add("active");
-            isFirst = false;
-        }
-    };
-    
-    thumb.onerror = () => {
-        thumb.remove(); // Automatically removes missing slots (like _6, _7, _8) silently
-    };
-    
-    thumb.onclick = () => {
-        mainImg.src = imgSrc;
-        document.querySelectorAll(".modal-thumb").forEach(t => t.classList.remove("active"));
-        thumb.classList.add("active");
-    };
-    
-    thumbnailStrip.appendChild(thumb);
+        };
+        thumbnailStrip.appendChild(thumb);
+    });
 }
-}
+    
       const modalAddBtn =
         document.getElementById(
           "modal-add-btn"
