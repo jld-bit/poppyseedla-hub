@@ -1171,8 +1171,8 @@
       let imageCount = 0;
 
 const imageStr = product["Image2"] || product.image || "";
-const images = imageStr.split(',').map(img => img.trim()).filter(Boolean);
-
+const images = [...new Set(imageStr.split(',').map(img => img.trim()).filter(Boolean))];
+      
 if (images.length > 0) {
     mainImg.src = images[0];
     thumbnailStrip.innerHTML = "";
