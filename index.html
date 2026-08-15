@@ -1149,25 +1149,35 @@
         );
 
     const thumbnailStrip = document.getElementById("thumbnail-strip");
-let productImages = [];
-for (let i = 1; i <= 8; i++) {
-    productImages.push("images/" + id + "_" + i + ".jpg");
-}
+thumbnailStrip.innerHTML = "";
+let isFirst = true;
 
-if (productImages.length > 0) {
-    mainImg.src = productImages[0];
-    thumbnailStrip.innerHTML = "";
-    productImages.forEach((imgSrc, index) => {
-        const thumb = document.createElement("img");
-        thumb.src = imgSrc;
-        thumb.className = "modal-thumb" + (index === 0 ? " active" : "");
-        thumb.onclick = () => {
+for (let i = 1; i <= 8; i++) {
+    const imgSrc = "images/" + id + "_" + i + ".jpg";
+    const thumb = document.createElement("img");
+    thumb.src = imgSrc;
+    thumb.className = "modal-thumb";
+    
+    thumb.onload = () => {
+        if (isFirst) {
             mainImg.src = imgSrc;
-            document.querySelectorAll(".modal-thumb").forEach(t => t.classList.remove("active"));
             thumb.classList.add("active");
-        };
-        thumbnailStrip.appendChild(thumb);
-    });
+            isFirst = false;
+        }
+    };
+    
+    thumb.onerror = () => {
+        thumb.remove(); // Automatically removes missing slots (like _6, _7, _8) silently
+    };
+    
+    thumb.onclick = () => {
+        mainImg.src = imgSrc;
+        document.querySelectorAll(".modal-thumb").forEach(t => t.classList.remove("active"));
+        thumb.classList.add("active");
+    };
+    
+    thumbnailStrip.appendChild(thumb);
+}
 }
       const modalAddBtn =
         document.getElementById(
