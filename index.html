@@ -774,8 +774,12 @@
        RENDER PRODUCTS
        ========================================= */
 
-    function renderProducts(category) {
+  let currentPage = 1;
+    const itemsPerPage = 12; // You can change this number to show more items!
 
+    function renderProducts(category, targetPage) {
+
+      currentPage = (typeof targetPage === 'number') ? targetPage : 1;
       currentCategory = category;
 
       const grid =
@@ -844,15 +848,30 @@
 
         grid.innerHTML =
           '<p class="empty-message">No items found.</p>';
+          
+        drawPaginationButtons(0);
 
         return;
 
       }
 
 
+      /* PAGINATION SLICE */
+      
+      const totalPages = Math.ceil(filtered.length / itemsPerPage);
+      
+      if (currentPage > totalPages && totalPages > 0) {
+          currentPage = totalPages;
+      }
+      
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedProducts = filtered.slice(startIndex, endIndex);
+
+
       /* CREATE PRODUCT CARDS */
 
-      filtered.forEach(function(product) {
+      paginatedProducts.forEach(function(product) {
 
         const itemNumber =
           safeText(product["Item number"]);
@@ -1043,7 +1062,53 @@
         );
 
       });
+      
+      drawPaginationButtons(totalPages);
 
+    }
+    
+    
+    /* =========================================
+       DRAW PAGINATION BUTTONS
+       ========================================= */
+       
+    function drawPaginationButtons(totalPages) {
+      let pageContainer = document.getElementById("pagination-container");
+      
+      if (!pageContainer) {
+        pageContainer = document.createElement("div");
+        pageContainer.id = "pagination-container";
+        pageContainer.style.textAlign = "center";
+        pageContainer.style.padding = "20px";
+        pageContainer.style.marginTop = "30px";
+        pageContainer.style.marginBottom = "30px";
+        
+        const grid = document.getElementById("product-grid");
+        grid.parentNode.insertBefore(pageContainer, grid.nextSibling);
+      }
+
+      if (totalPages <= 1) {
+        pageContainer.innerHTML = "";
+        return;
+      }
+
+      pageContainer.innerHTML = `
+        <button onclick="renderProducts('${currentCategory.replace(/'/g, "\\'")}', ${currentPage - 1}); window.scrollTo({top: 0, behavior: 'smooth'});" 
+                ${currentPage === 1 ? 'disabled' : ''} 
+                style="padding: 10px 20px; margin: 0 10px; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'}; background-color: ${currentPage === 1 ? '#eaeaea' : '#000'}; color: ${currentPage === 1 ? '#999' : '#fff'}; border: none; border-radius: 5px; font-weight: bold; transition: 0.3s;">
+          Previous
+        </button>
+        
+        <span style="font-size: 16px; font-weight: bold; margin: 0 15px;">
+          Page ${currentPage} of ${totalPages}
+        </span>
+        
+        <button onclick="renderProducts('${currentCategory.replace(/'/g, "\\'")}', ${currentPage + 1}); window.scrollTo({top: 0, behavior: 'smooth'});" 
+                ${currentPage === totalPages ? 'disabled' : ''} 
+                style="padding: 10px 20px; margin: 0 10px; cursor: ${currentPage === totalPages ? 'not-allowed' : 'pointer'}; background-color: ${currentPage === totalPages ? '#eaeaea' : '#000'}; color: ${currentPage === totalPages ? '#999' : '#fff'}; border: none; border-radius: 5px; font-weight: bold; transition: 0.3s;">
+          Next
+        </button>
+      `;
     }
 
 
@@ -1429,4 +1494,5 @@ if (images.length > 0) {
 </footer>
 
 </body>
-</html>
+</html>  
+
